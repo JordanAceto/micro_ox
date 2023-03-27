@@ -1,0 +1,17 @@
+# KiCad ignores
+fp-info-cache
+*-backups
+*.bak
+*.kicad_sch-bak
+*kicad_prl
+*kicad_prl-bak
+
+# Rust lang ignores
+**/*.rs.bk
+.#*
+.gdb_history
+Cargo.lock
+target/
+
+# misc ignores
+.vscode/*

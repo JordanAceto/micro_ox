@@ -1,0 +1,131 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid a8d450b3-6e2c-4dfd-af51-efbf733ea815)
+
+  (paper "A4")
+
+  (title_block
+    (title "MICRO-OX Modulation Board")
+    (date "2023-03-24")
+    (rev "0")
+    (comment 2 "creativecommons.org/licenses/by/4.0")
+    (comment 3 "license: CC by 4.0")
+    (comment 4 "Author: Jordan Aceto")
+  )
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 127 54.61) (size 25.4 38.1) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 33779dac-8662-4f93-bae2-bdac17939a5b)
+    (property "Sheetname" "digital_ctl_generators" (at 127 53.8984 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "digital_ctl_generators.kicad_sch" (at 127 93.2946 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815" (page "2"))
+      )
+    )
+  )
+
+  (sheet (at 212.09 128.27) (size 25.4 25.4) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 89c2fb6f-0e34-4343-9bfc-079becfb8447)
+    (property "Sheetname" "VCA_control" (at 212.09 127.5584 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "VCA_control.kicad_sch" (at 212.09 154.2546 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815" (page "10"))
+      )
+    )
+  )
+
+  (sheet (at 72.39 137.16) (size 25.4 25.4) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 8a4dadac-fe67-4264-9264-35dc1485f425)
+    (property "Sheetname" "mod_osc" (at 72.39 136.4484 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "mod_osc.kicad_sch" (at 72.39 163.1446 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815" (page "8"))
+      )
+    )
+  )
+
+  (sheet (at 63.5 78.74) (size 25.4 25.4) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid da767f0a-e8b3-4ec7-922a-653a8c184fc5)
+    (property "Sheetname" "s&h_mixer" (at 63.5 77.7884 0)
+      (effects (font (size 1.75 1.75)) (justify left bottom))
+    )
+    (property "Sheetfile" "s&h_mixer.kicad_sch" (at 63.5 104.7246 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (pin "MAIN_VCO" input (at 63.5 81.28 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid d5615f10-1ebb-417f-8215-5d303dc414df)
+    )
+    (pin "NOISE" input (at 63.5 86.36 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid d770bfa1-4d10-4e6d-868d-64d7425dc202)
+    )
+    (pin "PWM_LFO" input (at 63.5 83.82 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid ad8f3958-623b-428a-8e27-2c05fa941aac)
+    )
+    (pin "OUT_10V" output (at 88.9 81.28 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 6993c266-593b-4182-9915-0e81521df135)
+    )
+    (pin "OUT_3V3" output (at 88.9 83.82 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 8922f610-2041-40c4-a287-2915c5a2099f)
+    )
+    (instances
+      (project "sample_and_hold_board"
+        (path "/f57854f6-44ce-45d1-9f80-7b25e532c13d" (page "3"))
+      )
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815" (page "9"))
+      )
+    )
+  )
+
+  (sheet (at 129.54 165.1) (size 25.4 25.4) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid ed81f730-d221-4e80-9b40-fc6c0b6684c0)
+    (property "Sheetname" "power_supply" (at 129.54 164.1484 0)
+      (effects (font (size 1.75 1.75)) (justify left bottom))
+    )
+    (property "Sheetfile" "power_supply.kicad_sch" (at 129.54 191.0846 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815" (page "11"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

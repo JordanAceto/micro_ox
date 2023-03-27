@@ -1,0 +1,19 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid c8f1bfb8-accd-4b07-912b-3898a91ab89d)
+
+  (paper "A4")
+
+  (title_block
+    (title "MICRO-OX Modulation Board")
+    (date "2023-03-24")
+    (rev "0")
+    (comment 2 "creativecommons.org/licenses/by/4.0")
+    (comment 3 "license: CC by 4.0")
+    (comment 4 "Author: Jordan Aceto")
+  )
+
+  (lib_symbols
+  )
+
+)
