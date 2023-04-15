@@ -56,7 +56,9 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "starved_thermal|102606000|107696000|2e742d75-4315-45c2-bfdd-ac33b52fb75b|255a5508-994d-4bf4-8bef-4236a95ed90c|F.Cu"
+      ],
       "meta": {
         "version": 2
       },
@@ -176,10 +178,14 @@
       ],
       "track_widths": [
         0.0,
+        0.0,
+        0.0,
         0.2,
+        0.25,
         0.3,
         0.4,
-        0.5
+        0.5,
+        0.75
       ],
       "via_dimensions": [
         {
@@ -538,10 +544,6 @@
     [
       "da767f0a-e8b3-4ec7-922a-653a8c184fc5",
       "s&h_mixer"
-    ],
-    [
-      "89c2fb6f-0e34-4343-9bfc-079becfb8447",
-      "VCA_control"
     ],
     [
       "ed81f730-d221-4e80-9b40-fc6c0b6684c0",

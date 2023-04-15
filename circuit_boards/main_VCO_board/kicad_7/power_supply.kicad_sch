@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX Main VCO board")
-    (date "2023-03-27")
+    (date "2023-04-12")
     (rev "0")
     (comment 2 "creativecommons.org/licenses/by/4.0")
     (comment 3 "license: CC by 4.0")
@@ -1401,6 +1401,7 @@
       )
     )
   )
+
 
   (junction (at 266.7 133.35) (diameter 0) (color 0 0 0 0)
     (uuid 0516941b-07c5-4202-97d4-d6e39c9933a1)
@@ -3141,10 +3142,10 @@
   (symbol (lib_id "Device:R") (at 187.96 127 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0fd49608-d174-403b-9bcc-5df81e4a1f78)
-    (property "Reference" "R1002" (at 190.5 125.73 0)
+    (property "Reference" "R1002" (at 190.5 126.365 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "?" (at 190.5 128.27 0)
+    (property "Value" "4k7" (at 190.5 128.905 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 186.182 127 90)

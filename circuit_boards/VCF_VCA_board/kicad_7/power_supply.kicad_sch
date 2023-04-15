@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX VCF/VCA board")
-    (date "2023-03-21")
+    (date "2023-04-13")
     (rev "0")
     (comment 1 "creativecommons.org/licenses/by/4.0/")
     (comment 2 "License: CC by 4.0")
@@ -1233,6 +1233,7 @@
       )
     )
   )
+
 
   (junction (at 43.18 171.45) (diameter 0) (color 0 0 0 0)
     (uuid 07a05e12-4579-4253-8c12-eff222eb9b80)
@@ -2892,7 +2893,7 @@
     (property "Reference" "R701" (at 176.53 107.95 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "?" (at 176.53 110.49 0)
+    (property "Value" "2k7" (at 176.53 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 172.212 109.22 90)

@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX Modulation Board")
-    (date "2023-03-24")
+    (date "2023-04-13")
     (rev "0")
     (comment 2 "creativecommons.org/licenses/by/4.0")
     (comment 3 "license: CC by 4.0")
@@ -438,9 +438,9 @@
     )
   )
 
-  (bus_alias "" (members ))
   (bus_alias "SPI" (members "SCK" "SDO" "~{CS_0}" "~{CS_1}" "~{CS_2}"))
   (bus_alias "MUX" (members "S0" "S1" "S2" "S3" "COM_0" "COM_1"))
+  (bus_alias "" (members ))
   (junction (at 139.7 44.45) (diameter 0) (color 0 0 0 0)
     (uuid 22f3fd59-275a-49cf-8b63-7ec703a287a6)
   )
@@ -462,11 +462,11 @@
   (junction (at 139.7 67.31) (diameter 0) (color 0 0 0 0)
     (uuid 72452f13-976e-46ab-95ab-085d98b5ec87)
   )
-  (junction (at 179.07 102.87) (diameter 0) (color 0 0 0 0)
+  (junction (at 43.18 154.94) (diameter 0) (color 0 0 0 0)
     (uuid 85049abe-cff4-458c-baf8-3c0153ca1a7f)
   )
-  (junction (at 193.04 102.87) (diameter 0) (color 0 0 0 0)
-    (uuid a58c9f9e-5e0e-4fac-b908-5d47d4be751c)
+  (junction (at 57.15 154.94) (diameter 0) (color 0 0 0 0)
+    (uuid 98ab37e8-4758-4f3e-bf41-34c0c7c0ad13)
   )
   (junction (at 48.26 68.58) (diameter 0) (color 0 0 0 0)
     (uuid a9c6d7c1-4499-41ab-b820-3fa7b7710e57)
@@ -487,9 +487,9 @@
     (uuid fd59c2f3-f7ed-49c1-9bdc-5f524b8f7861)
   )
 
-  (no_connect (at 208.28 110.49) (uuid 36c62b79-10ca-495a-bc7a-c4b84ecf88e0))
-  (no_connect (at 208.28 107.95) (uuid d88bc331-3a79-40b1-833e-c2ef32270472))
-  (no_connect (at 208.28 105.41) (uuid f2980396-c2df-4075-9f4c-af9f6b15560b))
+  (no_connect (at 189.23 80.01) (uuid 856152d0-66ce-4e2b-931d-8d263cc1020e))
+  (no_connect (at 189.23 82.55) (uuid aaafffec-36c7-4581-b785-3f8ff785ff94))
+  (no_connect (at 189.23 85.09) (uuid f9e1157c-7899-4b1b-bc2c-64b596c8b673))
 
   (bus_entry (at 256.54 87.63) (size -2.54 2.54)
     (stroke (width 0) (type default))
@@ -532,6 +532,10 @@
     (stroke (width 0) (type default))
     (uuid 0b5dd9e5-61e2-4456-8171-4255d4466b42)
   )
+  (wire (pts (xy 189.23 110.49) (xy 208.28 110.49))
+    (stroke (width 0) (type default))
+    (uuid 0ca22b17-f563-4026-b5ac-b8742fab5d2b)
+  )
   (wire (pts (xy 220.98 118.11) (xy 220.98 120.65))
     (stroke (width 0) (type default))
     (uuid 0cb84e72-28b1-42e9-8917-d72b7017f69d)
@@ -539,6 +543,10 @@
   (wire (pts (xy 38.1 63.5) (xy 38.1 64.77))
     (stroke (width 0) (type default))
     (uuid 116efeea-7307-4efb-ad1e-ddfbd1920721)
+  )
+  (wire (pts (xy 189.23 102.87) (xy 208.28 102.87))
+    (stroke (width 0) (type default))
+    (uuid 13686317-f63c-4ab9-92f1-ed539af5ceb9)
   )
   (wire (pts (xy 87.63 45.72) (xy 93.98 45.72))
     (stroke (width 0) (type default))
@@ -556,6 +564,10 @@
   (wire (pts (xy 93.98 91.44) (xy 100.33 91.44))
     (stroke (width 0) (type default))
     (uuid 1f32cd2e-4d08-47c2-824c-9639caa415f8)
+  )
+  (wire (pts (xy 189.23 85.09) (xy 208.28 85.09))
+    (stroke (width 0) (type default))
+    (uuid 20e653a8-59d2-4a1e-815f-27a524621522)
   )
   (wire (pts (xy 38.1 72.39) (xy 38.1 73.66))
     (stroke (width 0) (type default))
@@ -577,17 +589,13 @@
     (stroke (width 0) (type default))
     (uuid 2706472a-17f3-4d59-813b-332609ec400e)
   )
-  (wire (pts (xy 179.07 92.71) (xy 179.07 90.17))
+  (wire (pts (xy 43.18 144.78) (xy 43.18 142.24))
     (stroke (width 0) (type default))
     (uuid 274e3118-21e8-4c92-978b-b58332925bac)
   )
   (wire (pts (xy 48.26 100.33) (xy 48.26 101.6))
     (stroke (width 0) (type default))
     (uuid 2800d1ba-a515-4b75-8332-9c1ee490192d)
-  )
-  (wire (pts (xy 193.04 102.87) (xy 208.28 102.87))
-    (stroke (width 0) (type default))
-    (uuid 287760fc-95b0-487b-a1f1-c4fafc7bb5f4)
   )
   (wire (pts (xy 48.26 45.72) (xy 54.61 45.72))
     (stroke (width 0) (type default))
@@ -602,6 +610,10 @@
     (uuid 2cc990b7-e64c-47ec-88f6-8f452cfaa42b)
   )
 
+  (wire (pts (xy 236.22 123.19) (xy 236.22 124.46))
+    (stroke (width 0) (type default))
+    (uuid 2deb83d6-fdb6-4e04-a07e-2ce145a3dce3)
+  )
   (wire (pts (xy 83.82 95.25) (xy 83.82 96.52))
     (stroke (width 0) (type default))
     (uuid 3189fdff-f07c-4905-8101-8fa23464653e)
@@ -639,7 +651,7 @@
     (stroke (width 0) (type default))
     (uuid 428dfc92-56ba-4954-9216-78c1b8f9ea1e)
   )
-  (wire (pts (xy 179.07 90.17) (xy 176.53 90.17))
+  (wire (pts (xy 43.18 142.24) (xy 40.64 142.24))
     (stroke (width 0) (type default))
     (uuid 47260ba5-dbff-414d-83f1-7bdecaa288d0)
   )
@@ -667,15 +679,23 @@
     (stroke (width 0) (type default))
     (uuid 5b81ff46-5dff-4c24-a5b1-ec36a084a1d2)
   )
+  (wire (pts (xy 57.15 154.94) (xy 66.04 154.94))
+    (stroke (width 0) (type default))
+    (uuid 607ca42a-ef8e-465f-b0a0-fdc7e620d3cb)
+  )
   (wire (pts (xy 139.7 44.45) (xy 139.7 45.72))
     (stroke (width 0) (type default))
     (uuid 60e26fb7-cb18-4dfb-9d8d-31e4a7f7c151)
+  )
+  (wire (pts (xy 236.22 132.08) (xy 236.22 133.35))
+    (stroke (width 0) (type default))
+    (uuid 632b4eff-7250-4fa8-b18e-faeda245fe21)
   )
   (wire (pts (xy 38.1 40.64) (xy 38.1 41.91))
     (stroke (width 0) (type default))
     (uuid 658b8348-d6c2-43f3-8fc4-3c791bf4f560)
   )
-  (wire (pts (xy 189.23 77.47) (xy 208.28 77.47))
+  (wire (pts (xy 189.23 107.95) (xy 208.28 107.95))
     (stroke (width 0) (type default))
     (uuid 667501af-9bfe-478b-89c0-fb6e13a4c56a)
   )
@@ -687,7 +707,7 @@
     (stroke (width 0) (type default))
     (uuid 6f061114-26a8-4850-99a9-24696c14ee04)
   )
-  (wire (pts (xy 179.07 113.03) (xy 179.07 115.57))
+  (wire (pts (xy 43.18 165.1) (xy 43.18 167.64))
     (stroke (width 0) (type default))
     (uuid 6f78213d-26eb-48bb-9424-cd6e3f0a5322)
   )
@@ -696,7 +716,7 @@
     (uuid 728ca9a6-4f0a-4fb3-9027-3c96cbbe78b0)
   )
 
-  (wire (pts (xy 193.04 102.87) (xy 193.04 105.41))
+  (wire (pts (xy 57.15 154.94) (xy 57.15 157.48))
     (stroke (width 0) (type default))
     (uuid 74056313-1afc-4de7-8191-f66152b91282)
   )
@@ -723,6 +743,10 @@
   (wire (pts (xy 41.91 68.58) (xy 48.26 68.58))
     (stroke (width 0) (type default))
     (uuid 81a67c4a-82e5-48f8-8d34-6ad72ad12736)
+  )
+  (wire (pts (xy 189.23 77.47) (xy 208.28 77.47))
+    (stroke (width 0) (type default))
+    (uuid 84b3b626-08a3-4595-a5bc-2730b110fd3e)
   )
   (wire (pts (xy 189.23 74.93) (xy 208.28 74.93))
     (stroke (width 0) (type default))
@@ -781,7 +805,7 @@
     (stroke (width 0) (type default))
     (uuid a5dc042c-4cd5-45ac-9288-3866be6ee7bc)
   )
-  (wire (pts (xy 179.07 100.33) (xy 179.07 102.87))
+  (wire (pts (xy 43.18 152.4) (xy 43.18 154.94))
     (stroke (width 0) (type default))
     (uuid a611bbb3-f1cd-464d-906d-d72a62560305)
   )
@@ -841,7 +865,7 @@
     (stroke (width 0) (type default))
     (uuid bdc6bd2d-2caa-42c3-940f-55b3cc5531c6)
   )
-  (wire (pts (xy 179.07 102.87) (xy 179.07 105.41))
+  (wire (pts (xy 43.18 154.94) (xy 43.18 157.48))
     (stroke (width 0) (type default))
     (uuid bdddbe11-4eca-4fc2-9a47-130d673c3be2)
   )
@@ -873,7 +897,7 @@
     (stroke (width 0) (type default))
     (uuid cebb30ab-6b18-46ef-9a18-78bf4cf05b43)
   )
-  (wire (pts (xy 179.07 102.87) (xy 193.04 102.87))
+  (wire (pts (xy 43.18 154.94) (xy 57.15 154.94))
     (stroke (width 0) (type default))
     (uuid cf31724c-3b39-4ea9-bdf7-11a01bcd1287)
   )
@@ -922,7 +946,7 @@
     (stroke (width 0) (type default))
     (uuid e9b69c0c-6404-46fb-832f-93dc7cccf816)
   )
-  (wire (pts (xy 189.23 85.09) (xy 208.28 85.09))
+  (wire (pts (xy 189.23 105.41) (xy 208.28 105.41))
     (stroke (width 0) (type default))
     (uuid ea26a24a-fac5-4fc8-b92f-7411a0ddc37c)
   )
@@ -938,7 +962,7 @@
     (stroke (width 0) (type default))
     (uuid f51572f1-62b5-4aaa-a809-e00e441150ec)
   )
-  (wire (pts (xy 193.04 113.03) (xy 193.04 115.57))
+  (wire (pts (xy 57.15 165.1) (xy 57.15 167.64))
     (stroke (width 0) (type default))
     (uuid f5791ed3-bf21-4f5f-9de2-78d81f648d9d)
   )
@@ -973,7 +997,7 @@
   )
 
   (text_box "Portamento CV comes from the main VCO board as a control voltage in the range [0v, +5v]"
-    (at 162.56 123.19 0) (size 26.67 17.78)
+    (at 26.67 175.26 0) (size 26.67 20.32)
     (stroke (width 0) (type default))
     (fill (type none))
     (effects (font (size 1.75 1.75)) (justify left top))
@@ -1001,7 +1025,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 07bdc1e9-6c91-4cc9-894b-796592e6f8b8)
   )
-  (label "S_AND_H_GLIDE" (at 189.23 100.33 0) (fields_autoplaced)
+  (label "S_AND_H_GLIDE" (at 189.23 97.79 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 0f68f025-20af-4457-8f95-46fc1a6db7a9)
   )
@@ -1013,15 +1037,19 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 20931570-aa76-4831-9f26-25da3accddb0)
   )
-  (label "MODOSC_RISE_TIME" (at 189.23 97.79 0) (fields_autoplaced)
+  (label "MODOSC_RISE_TIME" (at 189.23 77.47 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 26bbebee-27e4-45af-8d8c-03c103e98b18)
   )
-  (label "VCF_ENV_A" (at 189.23 72.39 0) (fields_autoplaced)
+  (label "PORTAMENTO_TIME" (at 189.23 100.33 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 28f55554-80f5-4659-90b9-79bb1a56170c)
+  )
+  (label "VCF_ENV_A" (at 189.23 95.25 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 35b8072c-df56-4121-92f5-a58be3c181bb)
   )
-  (label "MOD_ENV_S" (at 189.23 87.63 0) (fields_autoplaced)
+  (label "MOD_ENV_S" (at 189.23 107.95 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 3dffab44-2fe7-41e8-9950-a5a9d141ccf5)
   )
@@ -1033,7 +1061,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 4f955d3c-f7aa-427b-8c97-b1719e624fc6)
   )
-  (label "MOD_ENV_D" (at 189.23 85.09 0) (fields_autoplaced)
+  (label "MOD_ENV_D" (at 189.23 105.41 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 5736eaef-8fe7-4e2b-9341-606c0fe89e2a)
   )
@@ -1049,7 +1077,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 71659d24-9272-4e8e-9865-e1b88d48ce86)
   )
-  (label "VCF_ENV_R" (at 189.23 80.01 0) (fields_autoplaced)
+  (label "VCF_ENV_R" (at 189.23 87.63 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 7ee3b422-bd5a-43c7-a0cb-9ee9f400eda9)
   )
@@ -1061,11 +1089,11 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 9d4930ac-a8a9-4f54-93d1-c68b6343b4ba)
   )
-  (label "MOD_ENV_A" (at 189.23 82.55 0) (fields_autoplaced)
+  (label "MOD_ENV_A" (at 189.23 102.87 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid ac8e58c4-4b6b-49fc-9dc1-d5b11aaca8cf)
   )
-  (label "VCF_ENV_S" (at 189.23 77.47 0) (fields_autoplaced)
+  (label "VCF_ENV_S" (at 189.23 90.17 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid b6274536-abd5-4ba0-9cea-4970e35478f3)
   )
@@ -1081,11 +1109,15 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid c2ef3a57-b725-428a-a3c1-7df253cf4d57)
   )
-  (label "VCA_ENV_A" (at 189.23 92.71 0) (fields_autoplaced)
+  (label "PORTAMENTO_TIME" (at 66.04 154.94 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+    (uuid c5d0fb5b-8fd2-48b4-a517-ecc68dc1c7d1)
+  )
+  (label "VCA_ENV_A" (at 189.23 72.39 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid d3c65e25-dc55-42d5-b569-ff4934b87819)
   )
-  (label "VCA_ENV_R" (at 189.23 95.25 0) (fields_autoplaced)
+  (label "VCA_ENV_R" (at 189.23 74.93 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid da696827-a9e2-44c9-bad4-76ad01d58a93)
   )
@@ -1093,7 +1125,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid ddea28f6-24cf-4059-b0ff-978565890bc1)
   )
-  (label "MOD_ENV_R" (at 189.23 90.17 0) (fields_autoplaced)
+  (label "MOD_ENV_R" (at 189.23 110.49 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e132edd3-c43f-4c1e-8803-6b174391f125)
   )
@@ -1101,7 +1133,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e3b50c5f-398a-41e7-afe2-3563a197b71f)
   )
-  (label "VCF_ENV_D" (at 189.23 74.93 0) (fields_autoplaced)
+  (label "VCF_ENV_D" (at 189.23 92.71 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e91acac7-b43c-4e91-a21d-30bc98828c55)
   )
@@ -1114,7 +1146,7 @@
     (uuid f8ff6606-0f64-433b-821e-4d6623b719c6)
   )
 
-  (hierarchical_label "PORTAMENTO" (shape input) (at 176.53 90.17 180) (fields_autoplaced)
+  (hierarchical_label "PORTAMENTO" (shape input) (at 40.64 142.24 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 85b10cdd-b411-4f62-aa41-3ca664384ff4)
   )
@@ -1126,13 +1158,13 @@
   (symbol (lib_id "Device:C") (at 139.7 101.6 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0fbb0b35-1440-45f8-afab-bbc003e19143)
-    (property "Reference" "C?" (at 143.51 100.33 0)
+    (property "Reference" "C411" (at 143.51 100.33 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 143.51 102.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 140.6652 105.41 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 140.6652 105.41 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 139.7 101.6 0)
@@ -1143,7 +1175,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C411") (unit 1)
         )
       )
     )
@@ -1152,7 +1184,7 @@
   (symbol (lib_id "power:GND") (at 48.26 55.88 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 10e6c78f-d8f6-4632-b429-67dbd322193b)
-    (property "Reference" "#PWR0703" (at 48.26 62.23 0)
+    (property "Reference" "#PWR0409" (at 48.26 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 48.26 60.96 0)
@@ -1168,7 +1200,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0703") (unit 1)
+          (reference "#PWR0409") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1185,13 +1217,13 @@
   (symbol (lib_id "Device:C") (at 48.26 96.52 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 127cc632-5e19-4d56-8a29-f0244ede5d8e)
-    (property "Reference" "C?" (at 52.07 95.25 0)
+    (property "Reference" "C403" (at 52.07 95.25 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 52.07 97.79 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 49.2252 100.33 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 49.2252 100.33 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 48.26 96.52 0)
@@ -1202,7 +1234,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C403") (unit 1)
         )
       )
     )
@@ -1211,7 +1243,7 @@
   (symbol (lib_id "power:+3.3VA") (at 83.82 63.5 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 19bb5328-1db6-43b7-9230-d4be9200f998)
-    (property "Reference" "#PWR068" (at 83.82 67.31 0)
+    (property "Reference" "#PWR0415" (at 83.82 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 83.82 58.42 0)
@@ -1227,7 +1259,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR068") (unit 1)
+          (reference "#PWR0415") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1244,13 +1276,13 @@
   (symbol (lib_id "Device:C") (at 93.98 50.8 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 205bee9d-f168-4a7c-9f1e-e243047f42bb)
-    (property "Reference" "C?" (at 97.79 49.53 0)
+    (property "Reference" "C405" (at 97.79 49.53 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 97.79 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 94.9452 54.61 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 94.9452 54.61 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 93.98 50.8 0)
@@ -1261,7 +1293,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C405") (unit 1)
         )
       )
     )
@@ -1270,7 +1302,7 @@
   (symbol (lib_id "power:GND") (at 93.98 78.74 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 229d30d7-c89a-44ca-9432-7a394b3b3beb)
-    (property "Reference" "#PWR0709" (at 93.98 85.09 0)
+    (property "Reference" "#PWR0422" (at 93.98 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 93.98 83.82 0)
@@ -1286,7 +1318,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0709") (unit 1)
+          (reference "#PWR0422") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1303,7 +1335,7 @@
   (symbol (lib_id "power:+3.3VA") (at 129.54 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2940ceb8-85e3-4c31-9191-7dcd2f618709)
-    (property "Reference" "#PWR074" (at 129.54 43.18 0)
+    (property "Reference" "#PWR0425" (at 129.54 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 129.54 34.29 0)
@@ -1319,7 +1351,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR074") (unit 1)
+          (reference "#PWR0425") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1333,19 +1365,19 @@
     )
   )
 
-  (symbol (lib_id "Device:R") (at 179.07 109.22 0) (unit 1)
+  (symbol (lib_id "Device:R") (at 43.18 161.29 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2bcff9d1-fb3a-4a3f-899b-862dbeeef581)
-    (property "Reference" "R?" (at 181.61 107.95 0)
+    (property "Reference" "R402" (at 45.72 160.02 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "R" (at 181.61 110.49 0)
+    (property "Value" "10k" (at 45.72 162.56 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 177.292 109.22 90)
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 41.402 161.29 90)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 179.07 109.22 0)
+    (property "Datasheet" "~" (at 43.18 161.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid af289494-1a8d-4af2-9760-10e443cd349a))
@@ -1353,7 +1385,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "R?") (unit 1)
+          (reference "R402") (unit 1)
         )
       )
     )
@@ -1362,13 +1394,13 @@
   (symbol (lib_id "Device:C") (at 139.7 72.39 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2f42ea23-a436-4cd9-b799-0714ece27d08)
-    (property "Reference" "C?" (at 143.51 71.12 0)
+    (property "Reference" "C410" (at 143.51 71.12 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 143.51 73.66 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 140.6652 76.2 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 140.6652 76.2 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 139.7 72.39 0)
@@ -1379,7 +1411,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C410") (unit 1)
         )
       )
     )
@@ -1388,7 +1420,7 @@
   (symbol (lib_id "power:GND") (at 83.82 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 31753351-1e27-49eb-bad2-07cf61b45a10)
-    (property "Reference" "#PWR069" (at 83.82 80.01 0)
+    (property "Reference" "#PWR0416" (at 83.82 80.01 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 83.82 78.74 0)
@@ -1404,7 +1436,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR069") (unit 1)
+          (reference "#PWR0416") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1427,13 +1459,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 129.54 67.31 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3744bf48-4460-45cb-bbc0-63835a88d359)
-    (property "Reference" "RV?" (at 127 66.04 0)
+    (property "Reference" "RV410" (at 127 66.04 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 127 68.58 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 129.54 67.31 0)
+    (property "Footprint" "custom_footprints:Bourns_PTV09" (at 129.54 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 129.54 67.31 0)
@@ -1445,7 +1477,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV410") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1456,16 +1488,49 @@
     )
   )
 
+  (symbol (lib_id "power:+3.3V") (at 236.22 123.19 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 38b7d5ec-56ab-404b-b5ca-b0a1563f57d9)
+    (property "Reference" "#PWR0443" (at 236.22 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3V" (at 236.22 118.11 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 236.22 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 236.22 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid e34d41ef-77ff-4861-9a87-4205c72c89bd))
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
+          (reference "#PWR0443") (unit 1)
+        )
+      )
+      (project "stereo_whooshy_sound_main_board"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/21de5864-9c7e-4b85-83aa-ee1d3f0edbbb/1b244571-11bf-442d-bc2f-7477012760de"
+          (reference "#PWR0126") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/21de5864-9c7e-4b85-83aa-ee1d3f0edbbb/ae1a2f9d-41a4-4085-abf4-dab0159b2c35"
+          (reference "#PWR0154") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:R_Potentiometer") (at 129.54 96.52 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3935817b-235a-4bad-b99f-3bb13784b894)
-    (property "Reference" "RV?" (at 127 95.25 0)
+    (property "Reference" "RV411" (at 127 95.25 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 127 97.79 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 129.54 96.52 0)
+    (property "Footprint" "custom_footprints:Bourns_PTV09" (at 129.54 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 129.54 96.52 0)
@@ -1477,7 +1542,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV411") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1491,13 +1556,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 38.1 45.72 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3bb4c927-5e98-4b7c-a7a3-9194116b5a49)
-    (property "Reference" "RV?" (at 35.56 44.45 0)
+    (property "Reference" "RV401" (at 35.56 44.45 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 35.56 46.99 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 38.1 45.72 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 38.1 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 38.1 45.72 0)
@@ -1509,7 +1574,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV401") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1520,26 +1585,26 @@
     )
   )
 
-  (symbol (lib_id "power:GND") (at 193.04 115.57 0) (unit 1)
+  (symbol (lib_id "power:GND") (at 57.15 167.64 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3f99a765-2505-4a2b-9b87-a48ff9832306)
-    (property "Reference" "#PWR0702" (at 193.04 121.92 0)
+    (property "Reference" "#PWR0438" (at 57.15 173.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "GND" (at 193.04 120.65 0)
+    (property "Value" "GND" (at 57.15 172.72 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "" (at 193.04 115.57 0)
+    (property "Footprint" "" (at 57.15 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (at 193.04 115.57 0)
+    (property "Datasheet" "" (at 57.15 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 9333b2b0-8be9-4e2a-b260-827fc1516b6f))
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0702") (unit 1)
+          (reference "#PWR0438") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1556,7 +1621,7 @@
   (symbol (lib_id "power:GND") (at 93.98 124.46 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 43a65400-5b97-4f24-b6b8-2cfb287362a6)
-    (property "Reference" "#PWR0707" (at 93.98 130.81 0)
+    (property "Reference" "#PWR0424" (at 93.98 130.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 93.98 129.54 0)
@@ -1572,7 +1637,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0707") (unit 1)
+          (reference "#PWR0424") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1589,13 +1654,13 @@
   (symbol (lib_id "Device:C") (at 139.7 124.46 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 48187378-18e8-4153-95d2-4ace51363d01)
-    (property "Reference" "C?" (at 143.51 123.19 0)
+    (property "Reference" "C412" (at 143.51 123.19 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 143.51 125.73 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 140.6652 128.27 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 140.6652 128.27 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 139.7 124.46 0)
@@ -1606,7 +1671,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C412") (unit 1)
         )
       )
     )
@@ -1615,7 +1680,7 @@
   (symbol (lib_id "power:GND") (at 129.54 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 4a0df608-217f-452e-93c7-ea0b3367a5b5)
-    (property "Reference" "#PWR075" (at 129.54 55.88 0)
+    (property "Reference" "#PWR0426" (at 129.54 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 129.54 54.61 0)
@@ -1631,7 +1696,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR075") (unit 1)
+          (reference "#PWR0426") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1654,7 +1719,7 @@
   (symbol (lib_id "power:+3.3V") (at 220.98 62.23 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 4e0c638a-41c3-4aad-a414-92dd582daeda)
-    (property "Reference" "#PWR016" (at 220.98 66.04 0)
+    (property "Reference" "#PWR0439" (at 220.98 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3V" (at 220.98 57.15 0)
@@ -1670,7 +1735,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR016") (unit 1)
+          (reference "#PWR0439") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1687,7 +1752,7 @@
   (symbol (lib_id "power:GND") (at 129.54 124.46 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 52a8d9fb-1dac-4929-8a0b-bc247ad7f21b)
-    (property "Reference" "#PWR010" (at 129.54 130.81 0)
+    (property "Reference" "#PWR0432" (at 129.54 130.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 129.54 129.54 0)
@@ -1703,7 +1768,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR010") (unit 1)
+          (reference "#PWR0432") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1726,13 +1791,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 38.1 68.58 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5450b495-8482-42c1-81c0-9e0cafacd9b3)
-    (property "Reference" "RV?" (at 35.56 67.31 0)
+    (property "Reference" "RV402" (at 35.56 67.31 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 35.56 69.85 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 38.1 68.58 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 38.1 68.58 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 38.1 68.58 0)
@@ -1744,7 +1809,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV402") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1758,7 +1823,7 @@
   (symbol (lib_id "power:+3.3VA") (at 83.82 86.36 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 54ebf4c4-26d9-400f-8415-213e83aaac87)
-    (property "Reference" "#PWR070" (at 83.82 90.17 0)
+    (property "Reference" "#PWR0417" (at 83.82 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 83.82 81.28 0)
@@ -1774,7 +1839,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR070") (unit 1)
+          (reference "#PWR0417") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1788,19 +1853,19 @@
     )
   )
 
-  (symbol (lib_id "Device:C") (at 193.04 109.22 0) (unit 1)
+  (symbol (lib_id "Device:C") (at 57.15 161.29 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 58ecf640-6782-4562-8e57-a5db46e2933b)
-    (property "Reference" "C?" (at 196.85 107.95 0)
+    (property "Reference" "C413" (at 60.96 160.02 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "C" (at 196.85 110.49 0)
+    (property "Value" "100n" (at 60.96 162.56 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 194.0052 113.03 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 58.1152 165.1 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 193.04 109.22 0)
+    (property "Datasheet" "~" (at 57.15 161.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid f91a9284-2428-463c-aa73-45d5316edb32))
@@ -1808,7 +1873,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C413") (unit 1)
         )
       )
     )
@@ -1817,13 +1882,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 38.1 91.44 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 59559842-c8aa-43ca-b516-38595fe047df)
-    (property "Reference" "RV?" (at 35.56 90.17 0)
+    (property "Reference" "RV403" (at 35.56 90.17 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 35.56 92.71 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 38.1 91.44 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 38.1 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 38.1 91.44 0)
@@ -1835,7 +1900,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV403") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1849,7 +1914,7 @@
   (symbol (lib_id "power:+3.3VA") (at 38.1 109.22 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5da68e1e-cc9b-4d72-a8ed-027781949a8b)
-    (property "Reference" "#PWR024" (at 38.1 113.03 0)
+    (property "Reference" "#PWR0407" (at 38.1 113.03 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 38.1 104.14 0)
@@ -1865,7 +1930,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR024") (unit 1)
+          (reference "#PWR0407") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1882,7 +1947,7 @@
   (symbol (lib_id "power:GND") (at 129.54 72.39 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 62b0aee2-f06e-439c-9afd-e9187eabffeb)
-    (property "Reference" "#PWR077" (at 129.54 78.74 0)
+    (property "Reference" "#PWR0428" (at 129.54 78.74 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 129.54 77.47 0)
@@ -1898,7 +1963,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR077") (unit 1)
+          (reference "#PWR0428") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1921,7 +1986,7 @@
   (symbol (lib_id "power:GND") (at 38.1 50.8 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 646a73dd-c44c-42e9-9ffc-4136cff580a2)
-    (property "Reference" "#PWR019" (at 38.1 57.15 0)
+    (property "Reference" "#PWR0402" (at 38.1 57.15 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 38.1 55.88 0)
@@ -1937,7 +2002,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR019") (unit 1)
+          (reference "#PWR0402") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1960,7 +2025,7 @@
   (symbol (lib_id "power:GND") (at 139.7 54.61 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 66816539-8d37-41fd-9eae-28c6a052c319)
-    (property "Reference" "#PWR0711" (at 139.7 60.96 0)
+    (property "Reference" "#PWR0433" (at 139.7 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 139.7 59.69 0)
@@ -1976,7 +2041,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0711") (unit 1)
+          (reference "#PWR0433") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -1993,7 +2058,7 @@
   (symbol (lib_id "power:+3.3VA") (at 38.1 40.64 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6ec1644a-0719-41d5-b696-f247a84e6de2)
-    (property "Reference" "#PWR018" (at 38.1 44.45 0)
+    (property "Reference" "#PWR0401" (at 38.1 44.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 38.1 35.56 0)
@@ -2009,7 +2074,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR018") (unit 1)
+          (reference "#PWR0401") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2026,7 +2091,7 @@
   (symbol (lib_id "power:GND") (at 220.98 120.65 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6f8f0286-4b35-4e3a-8383-ea270e9033b0)
-    (property "Reference" "#PWR017" (at 220.98 127 0)
+    (property "Reference" "#PWR0440" (at 220.98 127 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 220.98 125.73 0)
@@ -2042,7 +2107,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR017") (unit 1)
+          (reference "#PWR0440") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2056,19 +2121,19 @@
     )
   )
 
-  (symbol (lib_id "Device:R") (at 179.07 96.52 0) (unit 1)
+  (symbol (lib_id "Device:R") (at 43.18 148.59 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6fb5c946-df49-4534-be03-60b3669f411c)
-    (property "Reference" "R?" (at 181.61 95.25 0)
+    (property "Reference" "R401" (at 45.72 147.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "R" (at 181.61 97.79 0)
+    (property "Value" "5k6" (at 45.72 149.86 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 177.292 96.52 90)
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 41.402 148.59 90)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 179.07 96.52 0)
+    (property "Datasheet" "~" (at 43.18 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid a6994b06-bac4-43d4-9238-fb8d4ade0a2a))
@@ -2076,7 +2141,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "R?") (unit 1)
+          (reference "R401") (unit 1)
         )
       )
     )
@@ -2085,13 +2150,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 83.82 91.44 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 703d7678-7854-4198-90aa-b31dd10e8acb)
-    (property "Reference" "RV?" (at 81.28 90.17 0)
+    (property "Reference" "RV407" (at 81.28 90.17 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 81.28 92.71 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 83.82 91.44 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 83.82 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 83.82 91.44 0)
@@ -2103,7 +2168,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV407") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2117,7 +2182,7 @@
   (symbol (lib_id "power:GND") (at 93.98 101.6 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 76c83684-d421-4751-8d3e-34dbbe8b3dd6)
-    (property "Reference" "#PWR0708" (at 93.98 107.95 0)
+    (property "Reference" "#PWR0423" (at 93.98 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 93.98 106.68 0)
@@ -2133,7 +2198,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0708") (unit 1)
+          (reference "#PWR0423") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2150,7 +2215,7 @@
   (symbol (lib_id "power:GND") (at 83.82 96.52 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7a77ba80-766d-4f21-9813-dca5f99c6a8b)
-    (property "Reference" "#PWR071" (at 83.82 102.87 0)
+    (property "Reference" "#PWR0418" (at 83.82 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 83.82 101.6 0)
@@ -2166,7 +2231,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR071") (unit 1)
+          (reference "#PWR0418") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2186,10 +2251,69 @@
     )
   )
 
+  (symbol (lib_id "power:GND") (at 236.22 133.35 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 80bcc154-6da8-4bad-91cf-d03cc8d735ea)
+    (property "Reference" "#PWR0442" (at 236.22 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 236.22 138.43 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 236.22 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 236.22 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid cb9ca3bf-5ed6-44f8-9909-5f0120f4680b))
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
+          (reference "#PWR0442") (unit 1)
+        )
+      )
+      (project "stereo_whooshy_sound_main_board"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/21de5864-9c7e-4b85-83aa-ee1d3f0edbbb/1b244571-11bf-442d-bc2f-7477012760de"
+          (reference "#PWR015") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/21de5864-9c7e-4b85-83aa-ee1d3f0edbbb/ae1a2f9d-41a4-4085-abf4-dab0159b2c35"
+          (reference "#PWR0155") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:C") (at 236.22 128.27 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 8336cdb7-216e-4c59-9bfd-362374c45aee)
+    (property "Reference" "C414" (at 240.03 127 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "100n" (at 240.03 129.54 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 237.1852 132.08 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 236.22 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid d2b63dc6-676d-4d84-bd7b-ae5816b75121))
+    (pin "2" (uuid 54abb704-3e10-463d-819c-f326aacbc270))
+    (instances
+      (project "modulation_board"
+        (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
+          (reference "C414") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "power:GND") (at 38.1 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 84859858-7622-4c50-a875-74950ee2be43)
-    (property "Reference" "#PWR021" (at 38.1 80.01 0)
+    (property "Reference" "#PWR0404" (at 38.1 80.01 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 38.1 78.74 0)
@@ -2205,7 +2329,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR021") (unit 1)
+          (reference "#PWR0404") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2228,7 +2352,7 @@
   (symbol (lib_id "power:GND") (at 38.1 96.52 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 84b4debf-0250-430c-87a2-8fe886838ce3)
-    (property "Reference" "#PWR023" (at 38.1 102.87 0)
+    (property "Reference" "#PWR0406" (at 38.1 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 38.1 101.6 0)
@@ -2244,7 +2368,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR023") (unit 1)
+          (reference "#PWR0406") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2267,7 +2391,7 @@
   (symbol (lib_id "power:GND") (at 93.98 55.88 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8a4292e4-20ab-476f-a108-27b7beaba0a2)
-    (property "Reference" "#PWR0710" (at 93.98 62.23 0)
+    (property "Reference" "#PWR0421" (at 93.98 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 93.98 60.96 0)
@@ -2283,7 +2407,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0710") (unit 1)
+          (reference "#PWR0421") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2300,13 +2424,13 @@
   (symbol (lib_id "Device:C") (at 93.98 119.38 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8af2131d-28b0-4ebf-90a7-bfa638763a47)
-    (property "Reference" "C?" (at 97.79 118.11 0)
+    (property "Reference" "C408" (at 97.79 118.11 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 97.79 120.65 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 94.9452 123.19 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 94.9452 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 93.98 119.38 0)
@@ -2317,7 +2441,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C408") (unit 1)
         )
       )
     )
@@ -2326,13 +2450,13 @@
   (symbol (lib_id "Device:C") (at 93.98 96.52 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8c634b49-98a3-4a0a-9b32-fcb399db7582)
-    (property "Reference" "C?" (at 97.79 95.25 0)
+    (property "Reference" "C407" (at 97.79 95.25 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 97.79 97.79 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 94.9452 100.33 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 94.9452 100.33 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 93.98 96.52 0)
@@ -2343,7 +2467,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C407") (unit 1)
         )
       )
     )
@@ -2352,7 +2476,7 @@
   (symbol (lib_id "power:+3.3VA") (at 129.54 114.3 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8ea77572-3476-42d1-93eb-70ba86567426)
-    (property "Reference" "#PWR04" (at 129.54 118.11 0)
+    (property "Reference" "#PWR0431" (at 129.54 118.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 129.54 109.22 0)
@@ -2368,7 +2492,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR04") (unit 1)
+          (reference "#PWR0431") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2385,7 +2509,7 @@
   (symbol (lib_id "power:+3.3VA") (at 129.54 62.23 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8f0cfe13-803b-40ac-8cb1-df29d86a4d78)
-    (property "Reference" "#PWR076" (at 129.54 66.04 0)
+    (property "Reference" "#PWR0427" (at 129.54 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 129.54 57.15 0)
@@ -2401,7 +2525,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR076") (unit 1)
+          (reference "#PWR0427") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2418,13 +2542,13 @@
   (symbol (lib_id "Device:C") (at 48.26 119.38 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 91800e27-bd0f-47ac-891f-19f0be95ce4e)
-    (property "Reference" "C?" (at 52.07 118.11 0)
+    (property "Reference" "C404" (at 52.07 118.11 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 52.07 120.65 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 49.2252 123.19 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 49.2252 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 48.26 119.38 0)
@@ -2435,7 +2559,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C404") (unit 1)
         )
       )
     )
@@ -2444,7 +2568,7 @@
   (symbol (lib_id "power:GND") (at 139.7 77.47 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9350e1dd-2646-417b-80cb-236c3a5aac1c)
-    (property "Reference" "#PWR0712" (at 139.7 83.82 0)
+    (property "Reference" "#PWR0434" (at 139.7 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 139.7 82.55 0)
@@ -2460,7 +2584,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0712") (unit 1)
+          (reference "#PWR0434") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2477,7 +2601,7 @@
   (symbol (lib_id "power:GND") (at 38.1 119.38 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 968975c7-681c-4343-8c70-ca7c2d6848ea)
-    (property "Reference" "#PWR065" (at 38.1 125.73 0)
+    (property "Reference" "#PWR0408" (at 38.1 125.73 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 38.1 124.46 0)
@@ -2493,7 +2617,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR065") (unit 1)
+          (reference "#PWR0408") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2516,7 +2640,7 @@
   (symbol (lib_id "power:GND") (at 139.7 129.54 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 98095b1b-2b60-48e6-b49b-ae212ea30072)
-    (property "Reference" "#PWR0714" (at 139.7 135.89 0)
+    (property "Reference" "#PWR0436" (at 139.7 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 139.7 134.62 0)
@@ -2532,7 +2656,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0714") (unit 1)
+          (reference "#PWR0436") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2549,7 +2673,7 @@
   (symbol (lib_id "power:GND") (at 83.82 50.8 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9de24afc-4a62-4117-be23-3809ef253245)
-    (property "Reference" "#PWR067" (at 83.82 57.15 0)
+    (property "Reference" "#PWR0414" (at 83.82 57.15 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 83.82 55.88 0)
@@ -2565,7 +2689,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR067") (unit 1)
+          (reference "#PWR0414") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2588,7 +2712,7 @@
   (symbol (lib_id "power:+3.3VA") (at 83.82 109.22 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a0b97cce-521d-44f7-8635-2ddb6bfd0f69)
-    (property "Reference" "#PWR072" (at 83.82 113.03 0)
+    (property "Reference" "#PWR0419" (at 83.82 113.03 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 83.82 104.14 0)
@@ -2604,7 +2728,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR072") (unit 1)
+          (reference "#PWR0419") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2618,26 +2742,26 @@
     )
   )
 
-  (symbol (lib_id "power:GND") (at 179.07 115.57 0) (unit 1)
+  (symbol (lib_id "power:GND") (at 43.18 167.64 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a30a84fe-735a-451e-84d7-f553ad788006)
-    (property "Reference" "#PWR0701" (at 179.07 121.92 0)
+    (property "Reference" "#PWR0437" (at 43.18 173.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "GND" (at 179.07 120.65 0)
+    (property "Value" "GND" (at 43.18 172.72 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "" (at 179.07 115.57 0)
+    (property "Footprint" "" (at 43.18 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (at 179.07 115.57 0)
+    (property "Datasheet" "" (at 43.18 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 5dfbee2b-f3d5-4755-af86-32abaea04d53))
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0701") (unit 1)
+          (reference "#PWR0437") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2654,13 +2778,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 83.82 45.72 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a78c5b04-5c4a-4d7f-bd87-649a299fa220)
-    (property "Reference" "RV?" (at 81.28 44.45 0)
+    (property "Reference" "RV405" (at 81.28 44.45 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 81.28 46.99 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 83.82 45.72 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 83.82 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 83.82 45.72 0)
@@ -2672,7 +2796,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV405") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2686,7 +2810,7 @@
   (symbol (lib_id "power:GND") (at 83.82 119.38 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ac9266e7-6525-4418-a31d-ed7b28848032)
-    (property "Reference" "#PWR073" (at 83.82 125.73 0)
+    (property "Reference" "#PWR0420" (at 83.82 125.73 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 83.82 124.46 0)
@@ -2702,7 +2826,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR073") (unit 1)
+          (reference "#PWR0420") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2725,13 +2849,13 @@
   (symbol (lib_id "Device:C") (at 48.26 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b13e15fb-e940-4d25-8583-0760190af1f2)
-    (property "Reference" "C?" (at 52.07 72.39 0)
+    (property "Reference" "C402" (at 52.07 72.39 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 52.07 74.93 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 49.2252 77.47 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 49.2252 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 48.26 73.66 0)
@@ -2742,7 +2866,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C402") (unit 1)
         )
       )
     )
@@ -2751,13 +2875,13 @@
   (symbol (lib_id "Device:C") (at 139.7 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ba016c7c-1fab-4bad-8f37-7a14a5057461)
-    (property "Reference" "C?" (at 143.51 48.26 0)
+    (property "Reference" "C409" (at 143.51 48.26 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 143.51 50.8 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 140.6652 53.34 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 140.6652 53.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 139.7 49.53 0)
@@ -2768,7 +2892,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C409") (unit 1)
         )
       )
     )
@@ -2777,13 +2901,13 @@
   (symbol (lib_id "Device:C") (at 93.98 73.66 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c12e63cd-5d84-4dec-88c2-34a1b175a1e5)
-    (property "Reference" "C?" (at 97.79 72.39 0)
+    (property "Reference" "C406" (at 97.79 72.39 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 97.79 74.93 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 94.9452 77.47 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 94.9452 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 93.98 73.66 0)
@@ -2794,7 +2918,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C406") (unit 1)
         )
       )
     )
@@ -2803,7 +2927,7 @@
   (symbol (lib_id "power:+3.3VA") (at 129.54 91.44 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c42adfd1-fa86-4023-8eb5-9e8196d403ff)
-    (property "Reference" "#PWR02" (at 129.54 95.25 0)
+    (property "Reference" "#PWR0429" (at 129.54 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 129.54 86.36 0)
@@ -2819,7 +2943,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR02") (unit 1)
+          (reference "#PWR0429") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2836,13 +2960,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 129.54 44.45 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c82f06e0-2ce4-4ecd-b720-7ad1eb4ff7de)
-    (property "Reference" "RV?" (at 127 43.18 0)
+    (property "Reference" "RV409" (at 127 43.18 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 127 45.72 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 129.54 44.45 0)
+    (property "Footprint" "custom_footprints:Bourns_PTV09" (at 129.54 44.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 129.54 44.45 0)
@@ -2854,7 +2978,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV409") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2868,7 +2992,7 @@
   (symbol (lib_id "power:GND") (at 139.7 106.68 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cc752287-fc72-42fc-bead-67cf99686bc6)
-    (property "Reference" "#PWR0713" (at 139.7 113.03 0)
+    (property "Reference" "#PWR0435" (at 139.7 113.03 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 139.7 111.76 0)
@@ -2884,7 +3008,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0713") (unit 1)
+          (reference "#PWR0435") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2901,7 +3025,7 @@
   (symbol (lib_id "power:GND") (at 48.26 78.74 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cce65d0c-9f9a-4ca5-92e8-b0a0ef347414)
-    (property "Reference" "#PWR0704" (at 48.26 85.09 0)
+    (property "Reference" "#PWR0410" (at 48.26 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 48.26 83.82 0)
@@ -2917,7 +3041,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0704") (unit 1)
+          (reference "#PWR0410") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2934,7 +3058,7 @@
   (symbol (lib_id "power:+3.3VA") (at 38.1 63.5 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d0ec92d3-bd2a-4cda-87e1-48d416e498b0)
-    (property "Reference" "#PWR020" (at 38.1 67.31 0)
+    (property "Reference" "#PWR0403" (at 38.1 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 38.1 58.42 0)
@@ -2950,7 +3074,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR020") (unit 1)
+          (reference "#PWR0403") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2967,13 +3091,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 83.82 68.58 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d17dbe5d-670b-4412-8add-85a30b171a49)
-    (property "Reference" "RV?" (at 81.28 67.31 0)
+    (property "Reference" "RV406" (at 81.28 67.31 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 81.28 69.85 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 83.82 68.58 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 83.82 68.58 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 83.82 68.58 0)
@@ -2985,7 +3109,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV406") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -2999,7 +3123,7 @@
   (symbol (lib_id "power:GND") (at 48.26 101.6 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ddfcbde0-d108-4092-9b39-fbfa42f78fac)
-    (property "Reference" "#PWR0705" (at 48.26 107.95 0)
+    (property "Reference" "#PWR0411" (at 48.26 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 48.26 106.68 0)
@@ -3015,7 +3139,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0705") (unit 1)
+          (reference "#PWR0411") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3032,13 +3156,13 @@
   (symbol (lib_id "Device:C") (at 48.26 50.8 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e0f554ca-f592-44f6-9c7c-ce66a80b55b7)
-    (property "Reference" "C?" (at 52.07 49.53 0)
+    (property "Reference" "C401" (at 52.07 49.53 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 52.07 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 49.2252 54.61 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 49.2252 54.61 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 48.26 50.8 0)
@@ -3049,7 +3173,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "C?") (unit 1)
+          (reference "C401") (unit 1)
         )
       )
     )
@@ -3058,13 +3182,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 38.1 114.3 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e2434481-5ef8-420c-a177-7b411e11086f)
-    (property "Reference" "RV?" (at 35.56 113.03 0)
+    (property "Reference" "RV404" (at 35.56 113.03 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 35.56 115.57 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 38.1 114.3 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 38.1 114.3 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 38.1 114.3 0)
@@ -3076,7 +3200,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV404") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3090,7 +3214,7 @@
   (symbol (lib_id "power:GND") (at 48.26 124.46 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e3079fec-8381-4717-885e-be3dfa907249)
-    (property "Reference" "#PWR0706" (at 48.26 130.81 0)
+    (property "Reference" "#PWR0412" (at 48.26 130.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 48.26 129.54 0)
@@ -3106,7 +3230,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0706") (unit 1)
+          (reference "#PWR0412") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3123,7 +3247,7 @@
   (symbol (lib_id "power:GND") (at 236.22 107.95 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e9a67f8c-e32b-4819-9d33-72d8784f475a)
-    (property "Reference" "#PWR0133" (at 236.22 114.3 0)
+    (property "Reference" "#PWR0441" (at 236.22 114.3 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 236.22 113.03 0)
@@ -3139,7 +3263,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR0133") (unit 1)
+          (reference "#PWR0441") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3156,13 +3280,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 129.54 119.38 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ee4299c6-40be-4e5d-a80b-24383e229d7c)
-    (property "Reference" "RV?" (at 127 118.11 0)
+    (property "Reference" "RV412" (at 127 118.11 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 127 120.65 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 129.54 119.38 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 129.54 119.38 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 129.54 119.38 0)
@@ -3174,7 +3298,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV412") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3188,7 +3312,7 @@
   (symbol (lib_id "custom_symbols:74HC4067PW") (at 220.98 90.17 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid eff7a538-1101-4dc9-b666-ffe1d6a0cee0)
-    (property "Reference" "U?" (at 221.1465 63.5 0)
+    (property "Reference" "U5" (at 221.1465 63.5 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "74HC4067PW" (at 221.1465 66.04 0)
@@ -3227,7 +3351,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "U?") (unit 1)
+          (reference "U5") (unit 1)
         )
       )
     )
@@ -3236,7 +3360,7 @@
   (symbol (lib_id "power:+3.3VA") (at 38.1 86.36 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f2b794d9-725d-4256-a85e-71580ae3ee94)
-    (property "Reference" "#PWR022" (at 38.1 90.17 0)
+    (property "Reference" "#PWR0405" (at 38.1 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 38.1 81.28 0)
@@ -3252,7 +3376,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR022") (unit 1)
+          (reference "#PWR0405") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3269,7 +3393,7 @@
   (symbol (lib_id "power:+3.3VA") (at 83.82 40.64 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f4b6834e-d7ba-4c82-afa7-850bb0263ee7)
-    (property "Reference" "#PWR066" (at 83.82 44.45 0)
+    (property "Reference" "#PWR0413" (at 83.82 44.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3VA" (at 83.82 35.56 0)
@@ -3285,7 +3409,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR066") (unit 1)
+          (reference "#PWR0413") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3302,7 +3426,7 @@
   (symbol (lib_id "power:GND") (at 129.54 101.6 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fc29bec7-a92f-4806-afe7-cada34c34bb0)
-    (property "Reference" "#PWR03" (at 129.54 107.95 0)
+    (property "Reference" "#PWR0430" (at 129.54 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 129.54 106.68 0)
@@ -3318,7 +3442,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "#PWR03") (unit 1)
+          (reference "#PWR0430") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
@@ -3341,13 +3465,13 @@
   (symbol (lib_id "Device:R_Potentiometer") (at 83.82 114.3 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid feae960d-adf5-4dfd-84d6-13eb6bb9563b)
-    (property "Reference" "RV?" (at 81.28 113.03 0)
+    (property "Reference" "RV408" (at 81.28 113.03 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "100k" (at 81.28 115.57 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "" (at 83.82 114.3 0)
+    (property "Footprint" "Potentiometer_THT:Potentiometer_Alpha_RD901F-40-00D_Single_Vertical" (at 83.82 114.3 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 83.82 114.3 0)
@@ -3359,7 +3483,7 @@
     (instances
       (project "modulation_board"
         (path "/a8d450b3-6e2c-4dfd-af51-efbf733ea815/33779dac-8662-4f93-bae2-bdac17939a5b/3051bebe-5a74-473f-97ac-5fdf24ea158d"
-          (reference "RV?") (unit 1)
+          (reference "RV408") (unit 1)
         )
       )
       (project "stereo_whooshy_sound_main_board"
