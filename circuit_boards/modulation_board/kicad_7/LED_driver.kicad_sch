@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX Modulation Board")
-    (date "2023-04-13")
+    (date "2023-04-20")
     (rev "0")
     (comment 2 "creativecommons.org/licenses/by/4.0")
     (comment 3 "license: CC by 4.0")
@@ -394,6 +394,7 @@
 
   (no_connect (at 146.05 81.28) (uuid 55c468ac-2258-4e56-8259-9834ef718f2a))
   (no_connect (at 146.05 104.14) (uuid 8d20bf38-8fbc-42ef-84d0-5441df785bd1))
+  (no_connect (at 146.05 99.06) (uuid bd941ff5-315b-4790-8106-70bfacd7187f))
   (no_connect (at 146.05 96.52) (uuid c1738424-67cd-4388-a20e-004abe6bbaed))
 
   (bus_entry (at 106.68 88.9) (size 2.54 -2.54)
@@ -467,10 +468,6 @@
     (uuid 57a872dd-06cd-41bd-b92e-899a4acb4bf8)
   )
 
-  (wire (pts (xy 146.05 99.06) (xy 156.21 99.06))
-    (stroke (width 0) (type default))
-    (uuid 5b4b6298-03ee-43ad-817a-f9732d523558)
-  )
   (wire (pts (xy 123.19 96.52) (xy 125.73 96.52))
     (stroke (width 0) (type default))
     (uuid 5b522941-4086-43a4-8394-c34402d63ae0)
@@ -594,8 +591,8 @@
     (uuid fd4d154a-f88c-401a-8faa-fe453b7702d3)
   )
 
-  (text_box "The MODOSC on/off LED is integrated into the pushbutton switch, which is on another page."
-    (at 152.4 101.6 0) (size 31.75 16.51)
+  (text_box "The MODOSC on/off LED is integrated into the pushbutton switch and driven by the DAC"
+    (at 151.13 99.06 0) (size 31.75 16.51)
     (stroke (width 0) (type default))
     (fill (type none))
     (effects (font (size 1.75 1.75)) (justify left top))
@@ -639,10 +636,6 @@
   (hierarchical_label "LED_SPI{SPI}" (shape bidirectional) (at 101.6 87.63 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 1ce00e5b-84af-419e-8cc3-22d6d8a94c95)
-  )
-  (hierarchical_label "MODOSC_ON_OFF_LED" (shape output) (at 156.21 99.06 0) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid 95c7c677-3db2-4e53-8533-a300687802dc)
   )
 
   (symbol (lib_id "power:GND") (at 123.19 127 0) (unit 1)

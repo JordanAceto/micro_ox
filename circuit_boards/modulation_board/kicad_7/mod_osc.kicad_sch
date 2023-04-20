@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX Modulation Board")
-    (date "2023-04-13")
+    (date "2023-04-20")
     (rev "0")
     (comment 2 "creativecommons.org/licenses/by/4.0")
     (comment 3 "license: CC by 4.0")
@@ -2440,7 +2440,7 @@
     (property "Reference" "R815" (at 132.588 26.7716 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "4k7" (at 132.588 29.083 0)
+    (property "Value" "10k" (at 132.588 29.083 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 132.588 27.94 90)
