@@ -85,25 +85,25 @@ impl GateRouting {
         let manual_gate = midi_gate | ext_gate;
 
         let this_s_and_h_gate =
-            combine_ext_and_auto_gate(manual_gate, auto_gate, ui.s_and_h_trig_src());
+            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.s_and_h_trig_src());
         self.s_and_h_gate =
             gate_state_from_last_and_curr(self.last_s_and_h_gate, this_s_and_h_gate);
         self.last_s_and_h_gate = this_s_and_h_gate;
 
         let this_vcf_env_gate =
-            combine_ext_and_auto_gate(manual_gate, auto_gate, ui.vcf_env_trig_src());
+            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.vcf_env_trig_src());
         self.vcf_env_gate =
             gate_state_from_last_and_curr(self.last_vcf_env_gate, this_vcf_env_gate);
         self.last_s_and_h_gate = this_s_and_h_gate;
 
         let this_mod_env_gate =
-            combine_ext_and_auto_gate(manual_gate, auto_gate, ui.mod_env_trig_src());
+            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.mod_env_trig_src());
         self.mod_env_gate =
             gate_state_from_last_and_curr(self.last_mod_env_gate, this_mod_env_gate);
         self.last_mod_env_gate = this_mod_env_gate;
 
         let this_vca_env_gate =
-            combine_ext_and_auto_gate(manual_gate, auto_gate, ui.vca_env_trig_src());
+            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.vca_env_trig_src());
         self.vca_env_gate =
             gate_state_from_last_and_curr(self.last_vca_env_gate, this_vca_env_gate);
         self.last_vca_env_gate = this_vca_env_gate;
@@ -128,12 +128,16 @@ fn apply_logic(p1: bool, p2: bool, logic_mode: AutoGateLogicMode) -> bool {
     }
 }
 
-/// `combine_ext_and_auto_gate(e, a, t)` combines gates `e` and `a` based on trigger source `t`
-fn combine_ext_and_auto_gate(ext_gate: bool, auto_gate: bool, trigger_src: TriggerSource) -> bool {
+/// `combine_manual_and_auto_gate(m, a, t)` combines gates `m` and `a` based on trigger source `t`
+fn combine_manual_and_auto_gate(
+    man_gate: bool,
+    auto_gate: bool,
+    trigger_src: TriggerSource,
+) -> bool {
     match trigger_src {
-        TriggerSource::Gate => ext_gate,
+        TriggerSource::Gate => man_gate,
         TriggerSource::Auto => auto_gate,
-        TriggerSource::Both => ext_gate & auto_gate,
+        TriggerSource::Both => man_gate & auto_gate,
     }
 }
 
