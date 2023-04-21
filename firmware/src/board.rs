@@ -1,9 +1,12 @@
+use cortex_m::peripheral::NVIC;
+
 use stm32l4xx_hal::{
     adc::{SampleTime, ADC},
     delay::Delay,
-    device::{ADC1, SPI1, USART1},
-    gpio::{Alternate, Analog, Floating, Input, Output, Pin, PullUp, PushPull, H8, L8},
+    device::{Interrupt, ADC1, EXTI, RNG, SPI1, TIM1, USART1},
+    gpio::{Alternate, Analog, Edge, Floating, Input, Output, Pin, PullUp, PushPull, H8, L8},
     hal::spi::{Mode, Phase, Polarity},
+    pac::interrupt,
     prelude::*,
     serial,
     spi::Spi,
@@ -21,13 +24,9 @@ pub struct Board {
     // SPI for DACs and LED driver
     spi: SpiBus,
 
+    // ADC for reading the sample & hold and analog MUX
     adc1: ADC,
     s_and_h_pin: Pin<Analog, L8, 'A', 0>,
-
-    // gate input pins
-    not_ext_gate: Pin<Input<Floating>, H8, 'A', 8>,
-    modosc_sqr: Pin<Input<Floating>, H8, 'A', 11>,
-    pwm_lfo_sqr: Pin<Input<Floating>, H8, 'A', 12>,
 
     // general purpose delay
     delay: Delay,
@@ -35,8 +34,13 @@ pub struct Board {
     // binary representation of the LEDs driven by 74HC595 shift register
     led_state: u8,
 
+    // state of the various gate/trigger inputs
+    ext_gate_pin: Pin<Input<Floating>, L8, 'A', 7>,
+    pwm_lfo_sqr_pin: Pin<Input<Floating>, L8, 'B', 0>,
+    modosc_sqr_pin: Pin<Input<Floating>, L8, 'B', 1>,
+
     // debug pin for misc debug purposes
-    debug_pin: Pin<Output<PushPull>, L8, 'B', 0>,
+    debug_pin: Pin<Output<PushPull>, H8, 'A', 12>,
 }
 
 impl Board {
@@ -48,13 +52,14 @@ impl Board {
         //
         ////////////////////////////////////////////////////////////////////////
         let cp = cortex_m::Peripherals::take().unwrap();
-        let dp = stm32l4xx_hal::pac::Peripherals::take().unwrap();
+        let mut dp = stm32l4xx_hal::pac::Peripherals::take().unwrap();
         let mut flash = dp.FLASH.constrain();
         let mut rcc = dp.RCC.constrain();
         let mut pwr = dp.PWR.constrain(&mut rcc.apb1r1);
 
         let clocks = rcc
             .cfgr
+            .hsi48(true) // needed for RNG
             .sysclk(SYST_CLK_FREQ_MHZ.MHz())
             .pclk1(SYST_CLK_FREQ_MHZ.MHz())
             .pclk2(SYST_CLK_FREQ_MHZ.MHz())
@@ -120,6 +125,33 @@ impl Board {
 
         ////////////////////////////////////////////////////////////////////////
         //
+        // MUX
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+        let mux = Mux {
+            sel_n: (
+                gpioa
+                    .pa3
+                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
+                gpioa
+                    .pa4
+                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
+                gpioa
+                    .pa5
+                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
+                gpioa
+                    .pa6
+                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
+            ),
+            com_analog: gpioa.pa1.into_analog(&mut gpioa.moder, &mut gpioa.pupdr),
+            com_discrete: gpioa
+                .pa2
+                .into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr),
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        //
         // SPI
         //
         ////////////////////////////////////////////////////////////////////////
@@ -170,30 +202,60 @@ impl Board {
 
         ////////////////////////////////////////////////////////////////////////
         //
-        // MUX
+        // PWM White Noise Generator
         //
         ////////////////////////////////////////////////////////////////////////
 
-        let mux = Mux {
-            sel_n: (
-                gpioa
-                    .pa3
-                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
-                gpioa
-                    .pa4
-                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
-                gpioa
-                    .pa5
-                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
-                gpioa
-                    .pa6
-                    .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
-            ),
-            com_analog: gpioa.pa1.into_analog(&mut gpioa.moder, &mut gpioa.pupdr),
-            com_discrete: gpioa
-                .pa2
-                .into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr),
-        };
+        // RNG and PWM are set up to continuously generate a noise signal on pin PA8
+        // this signal is updated in the RNG interrupt
+        let _rng = dp.RNG.enable(&mut rcc.ahb2, clocks);
+        unsafe {
+            // enable RNG interrupts, each time a new random number is ready the interrupt fires
+            (*RNG::ptr()).cr.modify(|_, w| w.ie().set_bit());
+            NVIC::unmask(Interrupt::RNG);
+        }
+
+        // configure TIM1 for PWM generation, the initial freq is just a placeholder, the actual frequency will depend
+        // on the WHITE_NOISE_PWM_MAX_COUNT, and will be around SYST_CLK_FREQ_MHZ / WHITE_NOISE_PWM_MAX_COUNT
+        let pwm_pin =
+            gpioa
+                .pa8
+                .into_alternate(&mut gpioa.moder, &mut gpioa.otyper, &mut gpioa.afrh);
+        let mut pwm = dp.TIM1.pwm(pwm_pin, 1.kHz(), clocks, &mut rcc.apb2);
+        unsafe {
+            (*TIM1::ptr()).psc.write(|w| w.bits(0));
+            (*TIM1::ptr())
+                .arr
+                .write(|w| w.bits(WHITE_NOISE_PWM_MAX_COUNT));
+            (*TIM1::ptr())
+                .ccr1
+                .write(|w| w.ccr().bits(WHITE_NOISE_PWM_MAX_COUNT as u16 / 2));
+        }
+        pwm.enable();
+
+        ////////////////////////////////////////////////////////////////////////
+        //
+        // GPIO interrupt pins
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+        let mut modosc_on_off_toggle = gpioa
+            .pa11
+            .into_floating_input(&mut gpioa.moder, &mut gpioa.pupdr);
+        modosc_on_off_toggle.make_interrupt_source(&mut dp.SYSCFG, &mut rcc.apb2);
+        modosc_on_off_toggle.enable_interrupt(&mut dp.EXTI);
+        // rising edges only, when the user taps the switch it toggles the MODOSC on/off
+        modosc_on_off_toggle.trigger_on_edge(&mut dp.EXTI, Edge::Rising);
+
+        unsafe {
+            NVIC::unmask(Interrupt::EXTI15_10); // MODOSC TOGGLE on PA11
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        //
+        // Create self
+        //
+        ////////////////////////////////////////////////////////////////////////
 
         Self {
             _midi_tx,
@@ -204,25 +266,32 @@ impl Board {
             s_and_h_pin,
             delay,
             led_state: 0,
-            not_ext_gate: gpioa
-                .pa8
+
+            ext_gate_pin: gpioa
+                .pa7
                 .into_floating_input(&mut gpioa.moder, &mut gpioa.pupdr),
-            modosc_sqr: gpioa
-                .pa11
-                .into_floating_input(&mut gpioa.moder, &mut gpioa.pupdr),
-            pwm_lfo_sqr: gpioa
-                .pa12
-                .into_floating_input(&mut gpioa.moder, &mut gpioa.pupdr),
-            debug_pin: gpiob.pb0.into_push_pull_output_in_state(
-                &mut gpiob.moder,
-                &mut gpiob.otyper,
+            pwm_lfo_sqr_pin: gpiob
+                .pb0
+                .into_floating_input(&mut gpiob.moder, &mut gpiob.pupdr),
+            modosc_sqr_pin: gpiob
+                .pb1
+                .into_floating_input(&mut gpiob.moder, &mut gpiob.pupdr),
+
+            // last_ext_gate_state: false,
+            // last_pwm_lfo_sqr_state: false,
+            // last_modosc_sqr_state: false,
+            debug_pin: gpioa.pa12.into_push_pull_output_in_state(
+                &mut gpioa.moder,
+                &mut gpioa.otyper,
                 PinState::Low,
             ),
         }
     }
 
-    /// `board.midi_read()` is the optional byte read from the MIDI UART
-    pub fn midi_read(&mut self) -> Option<u8> {
+    /// `board.read_midi()` is the optional byte read from the MIDI UART
+    ///
+    /// If MIDI input is expected this function must be called more frequently than the incoming MIDI bytes
+    pub fn read_midi(&mut self) -> Option<u8> {
         match self.midi_rx.read() {
             Ok(byte) => Some(byte),
             _ => None,
@@ -230,7 +299,7 @@ impl Board {
     }
 
     /// `board.read_analog_signal(s)` is the current value of analog signal `s` in `[0.0, 1.0]`
-    pub fn read_analog_signal(&mut self, signal: AnalogMuxSignal) -> f32 {
+    pub fn read_analog_signal(&mut self, signal: AnalogMuxChannel) -> f32 {
         self.mux.read_analog(&mut self.adc1, signal as u8)
     }
 
@@ -276,13 +345,13 @@ impl Board {
             }
         }
 
-        switch_3_way_state(
+        switch_3_way_state_from_upper_and_lower(
             self.mux.read_discrete(upper_mux_ch),
             self.mux.read_discrete(lower_mux_ch),
         )
     }
 
-    /// `board.dac8162_set_vout(v, c)` writes the voltage `v` to channel `c` of the onboard DAC.
+    /// `board.dac8162_set_vout(v, c)` writes voltage `v` to channel `c` of the onboard DAC.
     ///
     /// # Arguments
     ///
@@ -304,7 +373,7 @@ impl Board {
             .write(ChipSelect::Cs0, &[high_byte, mid_byte, low_byte]);
     }
 
-    /// `board.dac128S085_set_vout(v, c)` writes the voltage `v` to channel `c` of the onboard DAC.
+    /// `board.dac128S085_set_vout(v, c)` writes voltage `v` to channel `c` of the onboard DAC.
     ///
     /// # Arguments
     ///
@@ -326,27 +395,38 @@ impl Board {
 
     /// `board.set_led(l, s)` sets enumerated LED `l` to boolean state `s`
     pub fn set_led(&mut self, led: Led, state: bool) {
+        let last_led_state = self.led_state;
         if state {
             self.led_state |= led as u8;
         } else {
             self.led_state &= !(led as u8);
         }
-        self.spi.write(ChipSelect::Cs2, &[self.led_state])
+        if last_led_state != self.led_state {
+            self.spi.write(ChipSelect::Cs2, &[self.led_state])
+        }
     }
 
-    /// `board.ext_gate()` is the current state of the external gate input
-    pub fn ext_gate(&mut self) -> bool {
-        self.not_ext_gate.is_low()
+    /// `board.ext_gate_state()` is the current state of the External Gate Input ping
+    pub fn ext_gate_state(&mut self) -> bool {
+        // the external gate is inverted in hardware, so flip it again to get back to right-way-round
+        self.ext_gate_pin.is_low()
     }
 
-    /// `board.modosc_sqr()` is the current state of the MODOSC Square wave gate input
-    pub fn modosc_sqr(&mut self) -> bool {
-        self.modosc_sqr.is_high()
+    /// `board.modosc_sqr_state()` is the current state of the ModOsc Square Gate Input pin
+    pub fn modosc_sqr_state(&mut self) -> bool {
+        self.modosc_sqr_pin.is_high()
     }
 
-    /// `board.pwm_lfo_sqr()` is the current state of the PWM LFO Square wave input
-    pub fn pwm_lfo_sqr(&mut self) -> bool {
-        self.pwm_lfo_sqr.is_high()
+    /// `board.pwm_lfo_sqr_state()` is the current state of the PWM LFO Gate Input pin
+    pub fn pwm_lfo_sqr_state(&mut self) -> bool {
+        self.pwm_lfo_sqr_pin.is_high()
+    }
+
+    /// `board.modosc_toggle_switch_state()` is the current state of the MODOSC toggle switch
+    ///
+    /// Clicking the physical PCB mounted switch toggles the state between true and false
+    pub fn modosc_toggle_switch_state(&mut self) -> bool {
+        unsafe { core::ptr::read_volatile(&MODOSC_TOGGLE_SWITCH_STATE) }
     }
 
     /// `board.delay_ms(ms)` causes the board to busy-wait for `ms` milliseconds
@@ -361,17 +441,6 @@ impl Board {
         } else {
             self.debug_pin.set_low()
         }
-    }
-}
-
-/// `switch_3_way_state(u, l)` is the 3-way switch state matching the pin states `u` and `l`
-///
-/// Each 3-way switch has an upper and lower pin, the state is governed by the combination of pin states
-fn switch_3_way_state(upper_pin_state: bool, lower_pin_state: bool) -> Switch3wayState {
-    match (upper_pin_state, lower_pin_state) {
-        (false, true) => Switch3wayState::Up,
-        (true, true) => Switch3wayState::Middle,
-        _ => Switch3wayState::Down,
     }
 }
 
@@ -394,36 +463,6 @@ pub const DAC128S085_MAX_COUNT: u16 = (1 << 12) - 1;
 /// The maximum analog voltage that the DAC can produce after onboard amplification
 pub const DAC8162_MAX_VOUT: f32 = 10.0_f32;
 pub const DAC128S085_MAX_VOUT: f32 = 2.5_f32;
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private constants
-//
-////////////////////////////////////////////////////////////////////////////////
-
-/// The baud rate required for MIDI communication
-const MIDI_BAUD_RATE_HZ: u32 = 31_250;
-
-/// The SPI clock frequency to use
-const SPI_CLK_FREQ_MHZ: u32 = 10;
-
-/// The number of DAC counts for 1 volt output
-const DAC8162_COUNTS_PER_VOLT: f32 = DAC8162_MAX_COUNT as f32 / DAC8162_MAX_VOUT;
-const DAC128S085_COUNTS_PER_VOLT: f32 = DAC128S085_MAX_COUNT as f32 / DAC128S085_MAX_VOUT;
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private helper functions
-//
-////////////////////////////////////////////////////////////////////////////////
-
-/// `adc_fs_to_normalized_fl(v)` is the integer adc value normalized to [0.0, +1.0]
-///
-/// If the input value would overflow the output range it is clamped.
-fn adc_fs_to_normalized_fl(val: u16) -> f32 {
-    let val = val.min(ADC_MAX);
-    (val as f32) / (ADC_MAX as f32)
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -451,22 +490,23 @@ pub enum Switch3way {
     VcaCtlSrc,
 }
 
-/// Enumerated multiplexed analog signals are represented here.
+/// Enumerated multiplexed analog channels are represented here. Not all channels are wired up on the physical PCB
 #[derive(Clone, Copy)]
-pub enum AnalogMuxSignal {
-    VcfEnvAttack = 9,
-    VcfEnvDecay = 8,
-    VcfEnvSustain = 7,
-    VcfEnvRelease = 6,
-    ModEnvAttack = 12,
-    ModEnvDecay = 13,
-    ModEnvSustain = 14,
-    ModEnvRelease = 15,
-    VcaEnvAttack = 0,
-    VcaEnvRelease = 1,
-    ModOscRiseTime = 2,
-    SAndHGlide = 10,
-    Portamento = 11,
+pub enum AnalogMuxChannel {
+    I0 = 0,
+    I1 = 1,
+    I2 = 2,
+    // I3..I5 are not wired
+    I6 = 6,
+    I7 = 7,
+    I8 = 8,
+    I9 = 9,
+    I10 = 10,
+    I11 = 11,
+    I12 = 12,
+    I13 = 13,
+    I14 = 14,
+    I15 = 15,
 }
 
 /// Channels of the onboard DAC8162 are represented here
@@ -498,8 +538,38 @@ pub enum Led {
     ModEnvTrig = (1 << 3),
     AutoGate = (1 << 4),
     VcaTrig = (1 << 5),
-    ModOscOnOff = (1 << 7),
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Private constants
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/// The baud rate required for MIDI communication
+const MIDI_BAUD_RATE_HZ: u32 = 31_250;
+
+/// The SPI clock frequency to use
+const SPI_CLK_FREQ_MHZ: u32 = 10;
+
+/// The number of DAC counts for 1 volt output
+const DAC8162_COUNTS_PER_VOLT: f32 = DAC8162_MAX_COUNT as f32 / DAC8162_MAX_VOUT;
+const DAC128S085_COUNTS_PER_VOLT: f32 = DAC128S085_MAX_COUNT as f32 / DAC128S085_MAX_VOUT;
+
+/// The maximum value that can be written via PWM as white noise
+///
+/// This number impacts both the bit-depth of the white noise signal and also the PWM frequency used to generate the
+/// white noise output.
+const WHITE_NOISE_PWM_MAX_COUNT: u32 = (1 << 10) - 1;
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Private Static Variables
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/// the MODOSC is toggled on and off in an interrupt routine
+static mut MODOSC_TOGGLE_SWITCH_STATE: bool = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -593,5 +663,54 @@ impl SpiBus {
             ChipSelect::Cs1 => self.chip_sel.1.set_high(),
             ChipSelect::Cs2 => self.chip_sel.2.set_high(),
         }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Private helper functions and interrupt routines
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/// interrupt routine to generate white noise via PWM
+#[interrupt]
+fn RNG() {
+    unsafe {
+        let rand = ((*RNG::ptr()).dr.read().rndata().bits() % WHITE_NOISE_PWM_MAX_COUNT) as u16;
+        (*TIM1::ptr()).ccr1.write(|w| w.ccr().bits(rand))
+    };
+}
+
+#[interrupt]
+fn EXTI15_10() {
+    unsafe {
+        // clear the pending interrupt
+        (*EXTI::ptr()).pr1.write(|w| w.bits(1 << 11));
+
+        // toggle the static signal, this indicates that someone tapped the MODOSC toggle switch
+        let toggled_state = !core::ptr::read_volatile(&MODOSC_TOGGLE_SWITCH_STATE);
+        core::ptr::write_volatile(&mut MODOSC_TOGGLE_SWITCH_STATE, toggled_state);
+    }
+}
+
+/// `adc_fs_to_normalized_fl(v)` is the integer adc value normalized to [0.0, +1.0]
+///
+/// If the input value would overflow the output range it is clamped.
+fn adc_fs_to_normalized_fl(val: u16) -> f32 {
+    let val = val.min(ADC_MAX);
+    (val as f32) / (ADC_MAX as f32)
+}
+
+/// `switch_3_way_state_from_upper_and_lower(u, l)` is the 3-way switch state matching the pin states `u` and `l`
+///
+/// Each 3-way switch has an upper and lower pin, the state is governed by the combination of pin states
+fn switch_3_way_state_from_upper_and_lower(
+    upper_pin_state: bool,
+    lower_pin_state: bool,
+) -> Switch3wayState {
+    match (upper_pin_state, lower_pin_state) {
+        (false, true) => Switch3wayState::Up,
+        (true, true) => Switch3wayState::Middle,
+        _ => Switch3wayState::Down,
     }
 }
