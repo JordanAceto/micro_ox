@@ -2,6 +2,9 @@
 #![no_main]
 
 mod board;
+mod envelopes;
+mod gate_routing;
+mod ui;
 use crate::board::Board;
 
 use panic_halt as _;

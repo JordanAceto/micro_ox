@@ -1,4 +1,4 @@
-use crate::gate_routing::{GateRouting, GateState};
+use crate::gate_routing::{GateRouting, GateSignal, GateState};
 use crate::ui::{Potentiometer, Ui};
 use synth_utils::adsr::{Adsr, Input};
 
@@ -44,19 +44,19 @@ impl Envelopes {
 
     /// `es.tick(gr)` injects the gate signals held by `gr` and ticks each envelope, must be called at the sample rate
     pub fn tick(&mut self, gate_routing: GateRouting) {
-        match gate_routing.vcf_env_gate() {
+        match gate_routing.state(GateSignal::VcfEnv) {
             GateState::Rising => self.vcf_env.gate_on(),
             GateState::Falling => self.vcf_env.gate_off(),
             _ => (),
         };
 
-        match gate_routing.mod_env_gate() {
+        match gate_routing.state(GateSignal::ModEnv) {
             GateState::Rising => self.mod_env.gate_on(),
             GateState::Falling => self.mod_env.gate_off(),
             _ => (),
         };
 
-        match gate_routing.vca_env_gate() {
+        match gate_routing.state(GateSignal::VcaEnv) {
             GateState::Rising => self.vca_env.gate_on(),
             GateState::Falling => self.vca_env.gate_off(),
             _ => (),
@@ -101,5 +101,6 @@ impl Envelopes {
         self.vca_env.set_input(Input::Release(
             ui.scaled_pot(Potentiometer::VcaEnvRelease).into(),
         ));
+        // ignore VCA envelope Decay and Sustain inputs, these were set during initialization and don't need to change
     }
 }

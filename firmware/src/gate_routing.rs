@@ -1,4 +1,4 @@
-use crate::ui::{AutoGateLogicMode, AutoGateSource, TriggerSource, Ui};
+use crate::ui::{AutoGateLogicMode, AutoGateSource, TriggerSource, TriggerSwitch, Ui};
 
 /// A structure for routing gate signals is represented here.
 ///
@@ -35,35 +35,21 @@ impl GateRouting {
         }
     }
 
-    /// `gr.s_and_h_gate()` is the current state of the sample&hold gate after being routed through the panel controls
+    /// `gr.state(g)` is the current state of gate signal `g` after being routed through the panel controls
     ///
     /// The `gr.update()` function must be called periodically for this function to be valid
-    pub fn s_and_h_gate(&self) -> GateState {
-        self.s_and_h_gate
-    }
-
-    /// `gr.vcf_env_gate()` is the current state of the VCF ADSR gate after being routed through the panel controls
-    ///
-    /// The `gr.update()` function must be called periodically for this function to be valid
-    pub fn vcf_env_gate(&self) -> GateState {
-        self.vcf_env_gate
-    }
-
-    /// `gr.mod_env_gate()` is the current state of the MOD ADSR gate after being routed through the panel controls
-    ///
-    /// The `gr.update()` function must be called periodically for this function to be valid
-    pub fn mod_env_gate(&self) -> GateState {
-        self.mod_env_gate
-    }
-
-    /// `gr.vca_env_gate()` is the current state of the VCA AR gate after being routed through the panel controls
-    ///
-    /// The `gr.update()` function must be called periodically for this function to be valid
-    pub fn vca_env_gate(&self) -> GateState {
-        self.vca_env_gate
+    pub fn state(&self, gate: GateSignal) -> GateState {
+        match gate {
+            GateSignal::SAndH => self.s_and_h_gate,
+            GateSignal::VcfEnv => self.vcf_env_gate,
+            GateSignal::ModEnv => self.mod_env_gate,
+            GateSignal::VcaEnv => self.vca_env_gate,
+        }
     }
 
     /// `gr.update(p, mo, m, e, u)` updates the internal state of the Gate Routing structure based on the boolean inputs
+    ///
+    /// The various boolean gate singnals are routed and combined according to the position of the front panel UI
     ///
     /// This function must be called periodically as new gate inputs occur
     pub fn update(
@@ -74,40 +60,61 @@ impl GateRouting {
         ext_gate: bool,
         ui: &mut Ui,
     ) {
-        let auto_gate = match ui.auto_gate_src() {
+        let auto_gate = match ui.auto_gate_src_switch() {
             AutoGateSource::PwmLfo => pwm_lfo_gate,
             AutoGateSource::ModOsc => modosc_gate,
             AutoGateSource::Combo => {
-                apply_logic(pwm_lfo_gate, modosc_gate, ui.auto_gate_logic_mode())
+                apply_logic(pwm_lfo_gate, modosc_gate, ui.auto_gate_logic_switch())
             }
         };
 
         let manual_gate = midi_gate | ext_gate;
 
-        let this_s_and_h_gate =
-            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.s_and_h_trig_src());
+        let this_s_and_h_gate = combine_manual_and_auto_gate(
+            manual_gate,
+            auto_gate,
+            ui.trigger_switch(TriggerSwitch::SampleAndHold),
+        );
         self.s_and_h_gate =
             gate_state_from_last_and_curr(self.last_s_and_h_gate, this_s_and_h_gate);
         self.last_s_and_h_gate = this_s_and_h_gate;
 
-        let this_vcf_env_gate =
-            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.vcf_env_trig_src());
+        let this_vcf_env_gate = combine_manual_and_auto_gate(
+            manual_gate,
+            auto_gate,
+            ui.trigger_switch(TriggerSwitch::VcfEnv),
+        );
         self.vcf_env_gate =
             gate_state_from_last_and_curr(self.last_vcf_env_gate, this_vcf_env_gate);
         self.last_s_and_h_gate = this_s_and_h_gate;
 
-        let this_mod_env_gate =
-            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.mod_env_trig_src());
+        let this_mod_env_gate = combine_manual_and_auto_gate(
+            manual_gate,
+            auto_gate,
+            ui.trigger_switch(TriggerSwitch::ModEnv),
+        );
         self.mod_env_gate =
             gate_state_from_last_and_curr(self.last_mod_env_gate, this_mod_env_gate);
         self.last_mod_env_gate = this_mod_env_gate;
 
-        let this_vca_env_gate =
-            combine_manual_and_auto_gate(manual_gate, auto_gate, ui.vca_env_trig_src());
+        let this_vca_env_gate = combine_manual_and_auto_gate(
+            manual_gate,
+            auto_gate,
+            ui.trigger_switch(TriggerSwitch::VcaEnv),
+        );
         self.vca_env_gate =
             gate_state_from_last_and_curr(self.last_vca_env_gate, this_vca_env_gate);
         self.last_vca_env_gate = this_vca_env_gate;
     }
+}
+
+/// Enumerated gate signals are represented here, each trigger-able component gets its own gate signal
+#[derive(Clone, Copy)]
+pub enum GateSignal {
+    SAndH,
+    VcfEnv,
+    ModEnv,
+    VcaEnv,
 }
 
 /// Enumerated gate states are represented here. A gate signal will be in exactly one of these states at any given time
@@ -130,14 +137,14 @@ fn apply_logic(p1: bool, p2: bool, logic_mode: AutoGateLogicMode) -> bool {
 
 /// `combine_manual_and_auto_gate(m, a, t)` combines gates `m` and `a` based on trigger source `t`
 fn combine_manual_and_auto_gate(
-    man_gate: bool,
+    manual_gate: bool,
     auto_gate: bool,
     trigger_src: TriggerSource,
 ) -> bool {
     match trigger_src {
-        TriggerSource::Gate => man_gate,
+        TriggerSource::Gate => manual_gate,
         TriggerSource::Auto => auto_gate,
-        TriggerSource::Both => man_gate & auto_gate,
+        TriggerSource::Both => manual_gate & auto_gate,
     }
 }
 

@@ -102,54 +102,29 @@ impl Ui {
         };
 
         self.portamento_time =
-            scale_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11));
+            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11));
         self.s_and_h_glide_time =
-            scale_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I10));
+            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I10));
         self.modosc_rise_time =
-            scale_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I2));
+            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I2));
 
-        self.vcf_env_attack = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I9));
-        self.vcf_env_decay = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I8));
+        self.vcf_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I9));
+        self.vcf_env_decay = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I8));
         self.vcf_env_sustain = board.read_analog_signal(AnalogMuxChannel::I7);
-        self.vcf_env_release = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I6));
+        self.vcf_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I6));
 
-        self.mod_env_attack = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I12));
-        self.mod_env_decay = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I13));
+        self.mod_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I12));
+        self.mod_env_decay = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I13));
         self.mod_env_sustain = board.read_analog_signal(AnalogMuxChannel::I14);
-        self.mod_env_release = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I15));
+        self.mod_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I15));
 
-        self.vca_env_attack = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I0));
-        self.vca_env_release = scale_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I1));
+        self.vca_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I0));
+        self.vca_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I1));
     }
 
-    pub fn s_and_h_trig_src(&self) -> TriggerSource {
-        self.s_and_h_trig_src
-    }
-
-    pub fn vcf_env_trig_src(&self) -> TriggerSource {
-        self.vcf_env_trig_src
-    }
-
-    pub fn mod_env_trig_src(&self) -> TriggerSource {
-        self.mod_env_trig_src
-    }
-
-    pub fn vca_env_trig_src(&self) -> TriggerSource {
-        self.vca_env_trig_src
-    }
-
-    pub fn auto_gate_src(&self) -> AutoGateSource {
-        self.auto_gate_src
-    }
-
-    pub fn auto_gate_logic_mode(&self) -> AutoGateLogicMode {
-        self.auto_gate_logic_mode
-    }
-
-    pub fn vca_ctl_mode(&self, board: &mut Board) -> VcaCtlMode {
-        self.vca_ctl_mode
-    }
-
+    /// `ui.scaled_pot(p)` is the scaled value of front panel potentiometer `p`
+    ///
+    /// The potentiometers are scaled differently depending on purpose, some represent time, some are unitless
     pub fn scaled_pot(&self, pot: Potentiometer) -> f32 {
         match pot {
             Potentiometer::Portamento => self.portamento_time,
@@ -170,8 +145,42 @@ impl Ui {
             Potentiometer::VcaEnvRelease => self.vca_env_release,
         }
     }
+
+    /// `ui.trigger_switch(s)` is the current setting of front panel trigger switch `s`
+    ///
+    /// The trigger switches are for routing the trigger signals to the S&H and envelopes, each component gets a switch
+    pub fn trigger_switch(&self, dest: TriggerSwitch) -> TriggerSource {
+        match dest {
+            TriggerSwitch::SampleAndHold => self.s_and_h_trig_src,
+            TriggerSwitch::VcfEnv => self.vcf_env_trig_src,
+            TriggerSwitch::ModEnv => self.mod_env_trig_src,
+            TriggerSwitch::VcaEnv => self.vca_env_trig_src,
+        }
+    }
+
+    /// `ui.auto_gate_src_switch()` is the current setting of the front panel AUTO GATE SRC switch
+    ///
+    /// This switch is used for selecting which signals are used as the auto-gate
+    pub fn auto_gate_src_switch(&self) -> AutoGateSource {
+        self.auto_gate_src
+    }
+
+    /// `ui.auto_gate_logic_switch()` is the current setting of the front panel AUTO GATE LOGIC switch
+    ///
+    /// This switch is used to select how the auto gate sources are combined when in COMBO mode
+    pub fn auto_gate_logic_switch(&self) -> AutoGateLogicMode {
+        self.auto_gate_logic_mode
+    }
+
+    /// `ui.vca_ctl_mode_switch()` is the current value of the front panel VCA control mode switch
+    ///
+    /// This switch is used to select how the VCA is controlled
+    pub fn vca_ctl_mode_switch(&self) -> VcaCtlMode {
+        self.vca_ctl_mode
+    }
 }
 
+/// `switch_3_way_to_trig_src(s3)` maps the 3-way switch state `s3` to a trigger source, as defined by the front panel
 fn switch_3_way_to_trig_src(switch_state: Switch3wayState) -> TriggerSource {
     match switch_state {
         Switch3wayState::Up => TriggerSource::Gate,
@@ -180,16 +189,19 @@ fn switch_3_way_to_trig_src(switch_state: Switch3wayState) -> TriggerSource {
     }
 }
 
-fn scale_for_adsr_time(raw_adc_val: f32) -> f32 {
+/// `map_for_adsr_time(v)` maps raw value `v` in `[0.0, 1.0]` to a time in seconds for controlling ADSR times
+fn map_for_adsr_time(raw_adc_val: f32) -> f32 {
     // TODO
     raw_adc_val
 }
 
-fn scale_for_glide_or_rise_time(raw_adc_val: f32) -> f32 {
+/// `map_for_glide_or_rise_time(v)` maps raw value `v` in `[0.0. 1.0]` to a time in seconds for controlling glide
+fn map_for_glide_or_rise_time(raw_adc_val: f32) -> f32 {
     // TODO
     raw_adc_val
 }
 
+/// Enumerated front panel potentiometers are represented here
 #[derive(Clone, Copy)]
 pub enum Potentiometer {
     Portamento,
@@ -210,6 +222,21 @@ pub enum Potentiometer {
     VcaEnvRelease,
 }
 
+/// Enumerated front panel trigger switches are represented here
+///
+/// Each of the sample&hold and envelopes gets a front panel switch used to control which trigger source will apply
+/// to the trigger-able component
+#[derive(Clone, Copy)]
+pub enum TriggerSwitch {
+    SampleAndHold,
+    VcfEnv,
+    ModEnv,
+    VcaEnv,
+}
+
+/// Enumerated trigger sources are represented here
+///
+/// The sample&hold and envelopes may be triggered by either the manual gate, the auto gate, or the combination of both
 #[derive(Clone, Copy)]
 pub enum TriggerSource {
     Gate,
@@ -217,6 +244,9 @@ pub enum TriggerSource {
     Auto,
 }
 
+/// Enumerated auto-gate sources are represented here
+///
+/// The auto gate may come from the PWM LFO, the MODOSC, or from a logical combination of both
 #[derive(Clone, Copy)]
 pub enum AutoGateSource {
     PwmLfo,
@@ -224,6 +254,9 @@ pub enum AutoGateSource {
     Combo,
 }
 
+/// Enumerated auto-gate logic modes are represented here
+///
+/// When the auto-gate SRC is set to Combo, the logic represented by this enum is applied to the PWM LFO and MODOSC
 #[derive(Clone, Copy)]
 pub enum AutoGateLogicMode {
     And,
@@ -231,6 +264,7 @@ pub enum AutoGateLogicMode {
     Xor,
 }
 
+/// Enumerated VCA control modes are represented here
 #[derive(Clone, Copy)]
 pub enum VcaCtlMode {
     ModEnv,
