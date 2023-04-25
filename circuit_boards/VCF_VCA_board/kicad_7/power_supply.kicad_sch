@@ -6,8 +6,8 @@
 
   (title_block
     (title "MICRO-OX VCF/VCA board")
-    (date "2023-04-13")
-    (rev "0")
+    (date "2023-04-25")
+    (rev "0.1")
     (comment 1 "creativecommons.org/licenses/by/4.0/")
     (comment 2 "License: CC by 4.0")
     (comment 3 "Author: Jordan Aceto")
@@ -1233,7 +1233,6 @@
       )
     )
   )
-
 
   (junction (at 43.18 171.45) (diameter 0) (color 0 0 0 0)
     (uuid 07a05e12-4579-4253-8c12-eff222eb9b80)

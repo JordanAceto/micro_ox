@@ -6,8 +6,8 @@
 
   (title_block
     (title "MICRO-OX VCF/VCA board")
-    (date "2023-04-13")
-    (rev "0")
+    (date "2023-04-25")
+    (rev "0.1")
     (comment 1 "creativecommons.org/licenses/by/4.0/")
     (comment 2 "License: CC by 4.0")
     (comment 3 "Author: Jordan Aceto")
@@ -413,7 +413,6 @@
     )
   )
 
-
   (junction (at 184.15 63.5) (diameter 0) (color 0 0 0 0)
     (uuid 11d7c5af-916d-46e6-8c40-0d49cb8c60b4)
   )
@@ -627,6 +626,11 @@
   (wire (pts (xy 181.61 63.5) (xy 184.15 63.5))
     (stroke (width 0) (type default))
     (uuid f7fac70f-2797-4b14-8015-ced22710e712)
+  )
+
+  (text "approx. [0, +2.5v]" (at 72.39 146.05 0)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+    (uuid 8bde9b78-6a1d-47b4-b50b-c44dc944743d)
   )
 
   (global_label "-5V_REF" (shape input) (at 151.13 109.22 0) (fields_autoplaced)
@@ -1084,10 +1088,10 @@
   (symbol (lib_id "Device:R") (at 80.01 148.59 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a9543cdd-36d4-49ef-b245-5db099e6bd84)
-    (property "Reference" "R502" (at 80.01 142.24 90)
+    (property "Reference" "R502" (at 80.01 143.51 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "100k" (at 80.01 144.78 90)
+    (property "Value" "51k" (at 80.01 146.05 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 80.01 150.368 90)

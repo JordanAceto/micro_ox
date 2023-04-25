@@ -6,7 +6,7 @@
 
   (title_block
     (title "MICRO-OX Modulation Board")
-    (date "2023-04-21")
+    (date "2023-04-25")
     (rev "0")
     (comment 2 "creativecommons.org/licenses/by/4.0")
     (comment 3 "license: CC by 4.0")
@@ -199,6 +199,12 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "Datasheet" "https://www.vishay.com/docs/85748/1n4148w.pdf" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Sim.Device" "D" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Sim.Pins" "1=K 2=A" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_keywords" "diode" (at 0 0 0)

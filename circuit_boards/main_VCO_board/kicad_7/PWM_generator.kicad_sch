@@ -663,7 +663,6 @@
     )
   )
 
-
   (junction (at 139.7 54.61) (diameter 0) (color 0 0 0 0)
     (uuid 08a069b0-3522-403d-9936-bc3a396cebcc)
   )
@@ -1034,7 +1033,7 @@
     (effects (font (size 1.75 1.75) (thickness 0.35) bold) (justify left bottom))
     (uuid 8412fe8b-13ea-429e-b107-f67f8065127c)
   )
-  (text "RATE\nINDICATOR" (at 196.85 46.99 0)
+  (text "RATE\nINDICATOR" (at 187.96 46.99 0)
     (effects (font (size 1.75 1.75) (thickness 0.35) bold) (justify left bottom))
     (uuid ad8b1f6a-ed95-4a07-a8b4-c6ed97012ce9)
   )
