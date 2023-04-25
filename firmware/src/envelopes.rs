@@ -27,23 +27,23 @@ impl Envelopes {
         }
     }
 
-    /// `es.vcf_env()` is the current value of the VCF envelope generator
+    /// `es.vcf_env()` is the current value of the VCF envelope generator in `[0.0, 1.0]`
     pub fn vcf_env(&self) -> f32 {
         self.vcf_env.value()
     }
 
-    /// `es.mod_env()` is the current value of the MOD envelope generator
+    /// `es.mod_env()` is the current value of the MOD envelope generator in `[0.0, 1.0]`
     pub fn mod_env(&self) -> f32 {
         self.mod_env.value()
     }
 
-    /// `es.vca_env()` is the current value of the VCA envelope generator
+    /// `es.vca_env()` is the current value of the VCA envelope generator in `[0.0, 1.0]`
     pub fn vca_env(&self) -> f32 {
         self.vca_env.value()
     }
 
     /// `es.tick(gr)` injects the gate signals held by `gr` and ticks each envelope, must be called at the sample rate
-    pub fn tick(&mut self, gate_routing: GateRouting) {
+    pub fn tick(&mut self, gate_routing: &GateRouting) {
         match gate_routing.state(GateSignal::VcfEnv) {
             GateState::Rising => self.vcf_env.gate_on(),
             GateState::Falling => self.vcf_env.gate_off(),

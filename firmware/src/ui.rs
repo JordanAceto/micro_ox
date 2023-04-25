@@ -101,6 +101,7 @@ impl Ui {
             Switch3wayState::Down => VcaCtlMode::Ar,
         };
 
+        // MUX channels are chosen based on the physical PCB routing, see schematic if curious
         self.portamento_time =
             map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11));
         self.s_and_h_glide_time =

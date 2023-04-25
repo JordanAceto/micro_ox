@@ -11,11 +11,13 @@ pub struct GateRouting {
     last_vcf_env_gate: bool,
     last_mod_env_gate: bool,
     last_vca_env_gate: bool,
+    last_auto_gate: bool,
 
     s_and_h_gate: GateState,
     vcf_env_gate: GateState,
     mod_env_gate: GateState,
     vca_env_gate: GateState,
+    auto_gate: GateState,
 }
 
 impl GateRouting {
@@ -27,11 +29,13 @@ impl GateRouting {
             last_vcf_env_gate: false,
             last_mod_env_gate: false,
             last_vca_env_gate: false,
+            last_auto_gate: false,
 
             s_and_h_gate: GateState::Low,
             vcf_env_gate: GateState::Low,
             mod_env_gate: GateState::Low,
             vca_env_gate: GateState::Low,
+            auto_gate: GateState::Low,
         }
     }
 
@@ -44,6 +48,7 @@ impl GateRouting {
             GateSignal::VcfEnv => self.vcf_env_gate,
             GateSignal::ModEnv => self.mod_env_gate,
             GateSignal::VcaEnv => self.vca_env_gate,
+            GateSignal::AutoGate => self.auto_gate,
         }
     }
 
@@ -60,19 +65,21 @@ impl GateRouting {
         ext_gate: bool,
         ui: &mut Ui,
     ) {
-        let auto_gate = match ui.auto_gate_src_switch() {
+        let this_auto_gate = match ui.auto_gate_src_switch() {
             AutoGateSource::PwmLfo => pwm_lfo_gate,
             AutoGateSource::ModOsc => modosc_gate,
             AutoGateSource::Combo => {
                 apply_logic(pwm_lfo_gate, modosc_gate, ui.auto_gate_logic_switch())
             }
         };
+        self.auto_gate = gate_state_from_last_and_curr(self.last_auto_gate, this_auto_gate);
+        self.last_auto_gate = this_auto_gate;
 
-        let manual_gate = midi_gate | ext_gate;
+        let this_manual_gate = midi_gate | ext_gate;
 
         let this_s_and_h_gate = combine_manual_and_auto_gate(
-            manual_gate,
-            auto_gate,
+            this_manual_gate,
+            this_auto_gate,
             ui.trigger_switch(TriggerSwitch::SampleAndHold),
         );
         self.s_and_h_gate =
@@ -80,8 +87,8 @@ impl GateRouting {
         self.last_s_and_h_gate = this_s_and_h_gate;
 
         let this_vcf_env_gate = combine_manual_and_auto_gate(
-            manual_gate,
-            auto_gate,
+            this_manual_gate,
+            this_auto_gate,
             ui.trigger_switch(TriggerSwitch::VcfEnv),
         );
         self.vcf_env_gate =
@@ -89,8 +96,8 @@ impl GateRouting {
         self.last_s_and_h_gate = this_s_and_h_gate;
 
         let this_mod_env_gate = combine_manual_and_auto_gate(
-            manual_gate,
-            auto_gate,
+            this_manual_gate,
+            this_auto_gate,
             ui.trigger_switch(TriggerSwitch::ModEnv),
         );
         self.mod_env_gate =
@@ -98,8 +105,8 @@ impl GateRouting {
         self.last_mod_env_gate = this_mod_env_gate;
 
         let this_vca_env_gate = combine_manual_and_auto_gate(
-            manual_gate,
-            auto_gate,
+            this_manual_gate,
+            this_auto_gate,
             ui.trigger_switch(TriggerSwitch::VcaEnv),
         );
         self.vca_env_gate =
@@ -115,6 +122,7 @@ pub enum GateSignal {
     VcfEnv,
     ModEnv,
     VcaEnv,
+    AutoGate,
 }
 
 /// Enumerated gate states are represented here. A gate signal will be in exactly one of these states at any given time
@@ -124,6 +132,17 @@ pub enum GateState {
     Rising,
     High,
     Falling,
+}
+
+/// Gate States may be converted to booleans in a lossy way. Low and falling gates are considered false, high and rising
+/// gates are considered true
+impl From<GateState> for bool {
+    fn from(s: GateState) -> bool {
+        match s {
+            GateState::Low | GateState::Falling => false,
+            GateState::High | GateState::Rising => true,
+        }
+    }
 }
 
 /// `apply_logic(p1, p2, lm)` applies the logic represented by `lm` to boolean signals `p1` and `p2`

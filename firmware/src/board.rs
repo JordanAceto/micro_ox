@@ -1,15 +1,16 @@
 use cortex_m::peripheral::NVIC;
 
 use stm32l4xx_hal::{
-    adc::{SampleTime, ADC},
+    adc::{SampleTime, Sequence, ADC},
     delay::Delay,
-    device::{Interrupt, ADC1, EXTI, RNG, SPI1, TIM1, USART1},
-    gpio::{Alternate, Analog, Edge, Floating, Input, Output, Pin, PullUp, PushPull, H8, L8},
+    device::{Interrupt, ADC1, DMA1, EXTI, GPIOA, RNG, SPI1, TIM1, TIM15, TIM2, TIM6, USART1},
+    gpio::{Alternate, Edge, Floating, Input, Output, Pin, PullUp, PushPull, H8, L8},
     hal::spi::{Mode, Phase, Polarity},
-    pac::interrupt,
+    pac::{interrupt, ADC2},
     prelude::*,
     serial,
     spi::Spi,
+    timer::Timer,
 };
 
 /// The physical board structure is represented here
@@ -23,10 +24,6 @@ pub struct Board {
 
     // SPI for DACs and LED driver
     spi: SpiBus,
-
-    // ADC for reading the sample & hold and analog MUX
-    adc1: ADC,
-    s_and_h_pin: Pin<Analog, L8, 'A', 0>,
 
     // general purpose delay
     delay: Delay,
@@ -65,6 +62,8 @@ impl Board {
             .pclk2(SYST_CLK_FREQ_MHZ.MHz())
             .freeze(&mut flash.acr, &mut pwr);
 
+        let dma_channels = dp.DMA1.split(&mut rcc.ahb1);
+
         let mut delay = Delay::new(cp.SYST, clocks);
 
         let mut gpioa = dp.GPIOA.split(&mut rcc.ahb2);
@@ -95,9 +94,42 @@ impl Board {
 
         ////////////////////////////////////////////////////////////////////////
         //
-        // ADC
+        // TIMx periodic timers
         //
         ////////////////////////////////////////////////////////////////////////
+        let _tim2 = Timer::tim2(dp.TIM2, TIM2_FREQ_HZ.Hz(), clocks, &mut rcc.apb1r1);
+
+        let _tim6 = Timer::tim6(dp.TIM6, TIM6_FREQ_HZ.Hz(), clocks, &mut rcc.apb1r1);
+
+        let _tim15 = Timer::tim15(dp.TIM15, TIM15_FREQ_HZ.Hz(), clocks, &mut rcc.apb2);
+
+        ////////////////////////////////////////////////////////////////////////
+        //
+        // ADC1 with DMA to read the sample & hold automatically
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+        // configure DMA1 to transfer ADC readings to the buffer
+        let mut dma1_ch1 = dma_channels.1;
+        unsafe {
+            dma1_ch1.set_peripheral_address(&dp.ADC1.dr as *const _ as u32, false);
+            dma1_ch1.set_memory_address(ADC_DMA_BUFF.as_ptr() as u32, true);
+        }
+        dma1_ch1.set_transfer_length(NUM_ADC_DMA_SIGNALS as u16);
+        unsafe {
+            (*DMA1::ptr()).ccr1.modify(|_, w| {
+                w.msize()
+                    .bits16()
+                    .psize()
+                    .bits16()
+                    .minc()
+                    .enabled()
+                    .circ()
+                    .enabled()
+                    .en()
+                    .set_bit()
+            });
+        }
 
         let mut adc1 = ADC::new(
             dp.ADC1,
@@ -107,7 +139,8 @@ impl Board {
             &mut delay,
         );
 
-        adc1.set_sample_time(SampleTime::Cycles640_5);
+        let mut s_and_h_pin = gpioa.pa0.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
+        adc1.configure_sequence(&mut s_and_h_pin, Sequence::One, SampleTime::Cycles247_5);
 
         unsafe {
             // configure hardware oversampler for 16 bit resolution
@@ -119,9 +152,57 @@ impl Board {
                     .rovse()
                     .set_bit()
             });
+            // enable continuous DMA mode
+            (*ADC1::ptr())
+                .cfgr
+                .modify(|_, w| w.dmacfg().set_bit().dmaen().set_bit().cont().set_bit());
         }
 
-        let s_and_h_pin = gpioa.pa0.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
+        dma1_ch1.start();
+        adc1.start_conversion();
+
+        ////////////////////////////////////////////////////////////////////////
+        //
+        // ADC2 to read the front panel potentiometers manualy via MUX
+        //
+        ////////////////////////////////////////////////////////////////////////
+
+        // At the time of writing this the stm32l4xx_hal crate has not implemented ADC2, so it is done manually for now
+
+        unsafe {
+            // turn on and calibrate ADC2
+            (*ADC2::ptr()).cr.modify(|_, w| w.deeppwd().clear_bit());
+            (*ADC2::ptr()).cr.modify(|_, w| w.advregen().set_bit());
+            delay.delay_us(25_u32);
+            (*ADC2::ptr()).cr.modify(|_, w| {
+                w.adcal().set_bit();
+                w.adcaldif().clear_bit()
+            });
+            while (*ADC2::ptr()).cr.read().adcal().bit_is_set() {}
+            delay.delay_us(1_u32);
+
+            // configure hardware oversampler for 16 bit resolution
+            (*ADC2::ptr()).cfgr2.modify(|_, w| {
+                w.ovss()
+                    .bits(0b0001) // shift right by 1
+                    .ovsr()
+                    .bits(0b100) // oversample 32x
+                    .rovse()
+                    .set_bit()
+            });
+
+            // set sample time
+            (*ADC2::ptr()).smpr1.modify(|_, w| w.smp7().bits(0b100));
+
+            // sequence length of 1
+            (*ADC2::ptr()).sqr1.modify(|_, w| w.l().bits(0b0000));
+            // single sequence is channel 7 on PA2
+            (*ADC2::ptr()).sqr1.modify(|_, w| w.sq1().bits(7));
+            // enable ADC2
+            (*ADC2::ptr()).cr.modify(|_, w| w.aden().set_bit());
+
+            // we'll read ADC2 in the MUX related functions
+        }
 
         ////////////////////////////////////////////////////////////////////////
         //
@@ -144,9 +225,8 @@ impl Board {
                     .pa6
                     .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
             ),
-            com_analog: gpioa.pa1.into_analog(&mut gpioa.moder, &mut gpioa.pupdr),
             com_discrete: gpioa
-                .pa2
+                .pa1
                 .into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr),
         };
 
@@ -197,7 +277,7 @@ impl Board {
             ),
         };
 
-        // set the DAC128S085 to WTM mode, so that outputs update after writing to a register
+        // set the DAC128S085 to WTM mode, so that outputs update after each register write
         spi.write(ChipSelect::Cs1, &[0b1001_0000, 0]);
 
         ////////////////////////////////////////////////////////////////////////
@@ -227,9 +307,6 @@ impl Board {
             (*TIM1::ptr())
                 .arr
                 .write(|w| w.bits(WHITE_NOISE_PWM_MAX_COUNT));
-            (*TIM1::ptr())
-                .ccr1
-                .write(|w| w.ccr().bits(WHITE_NOISE_PWM_MAX_COUNT as u16 / 2));
         }
         pwm.enable();
 
@@ -248,7 +325,7 @@ impl Board {
         modosc_on_off_toggle.trigger_on_edge(&mut dp.EXTI, Edge::Rising);
 
         unsafe {
-            NVIC::unmask(Interrupt::EXTI15_10); // MODOSC TOGGLE on PA11
+            NVIC::unmask(Interrupt::EXTI15_10); // MODOSC TOGGLE switch on PA11
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -262,8 +339,6 @@ impl Board {
             midi_rx,
             mux,
             spi,
-            adc1,
-            s_and_h_pin,
             delay,
             led_state: 0,
 
@@ -277,9 +352,6 @@ impl Board {
                 .pb1
                 .into_floating_input(&mut gpiob.moder, &mut gpiob.pupdr),
 
-            // last_ext_gate_state: false,
-            // last_pwm_lfo_sqr_state: false,
-            // last_modosc_sqr_state: false,
             debug_pin: gpioa.pa12.into_push_pull_output_in_state(
                 &mut gpioa.moder,
                 &mut gpioa.otyper,
@@ -300,12 +372,12 @@ impl Board {
 
     /// `board.read_analog_signal(s)` is the current value of analog signal `s` in `[0.0, 1.0]`
     pub fn read_analog_signal(&mut self, signal: AnalogMuxChannel) -> f32 {
-        self.mux.read_analog(&mut self.adc1, signal as u8)
+        self.mux.read_analog(signal as u32)
     }
 
     /// `board.sample_and_hold()` is the current value of the onboard sample & hold, in `[0.0, 1.0]`
     pub fn sample_and_hold(&mut self) -> f32 {
-        adc_fs_to_normalized_fl(self.adc1.read(&mut self.s_and_h_pin).unwrap())
+        unsafe { adc_fs_to_normalized_fl(ADC_DMA_BUFF[0]) }
     }
 
     /// `board.read_switch_3_way(s)` is the current state of the enumerated 3-way switch `s`
@@ -406,32 +478,68 @@ impl Board {
         }
     }
 
-    /// `board.ext_gate_state()` is the current state of the External Gate Input ping
-    pub fn ext_gate_state(&mut self) -> bool {
+    /// `board.ext_gate()` is the current state of the External Gate Input ping
+    pub fn ext_gate(&mut self) -> bool {
         // the external gate is inverted in hardware, so flip it again to get back to right-way-round
         self.ext_gate_pin.is_low()
     }
 
-    /// `board.modosc_sqr_state()` is the current state of the ModOsc Square Gate Input pin
-    pub fn modosc_sqr_state(&mut self) -> bool {
+    /// `board.modosc_sqr()` is the current state of the ModOsc Square Gate Input pin
+    pub fn modosc_sqr(&mut self) -> bool {
         self.modosc_sqr_pin.is_high()
     }
 
-    /// `board.pwm_lfo_sqr_state()` is the current state of the PWM LFO Gate Input pin
-    pub fn pwm_lfo_sqr_state(&mut self) -> bool {
+    /// `board.pwm_lfo_sqr()` is the current state of the PWM LFO Gate Input pin
+    pub fn pwm_lfo_sqr(&mut self) -> bool {
         self.pwm_lfo_sqr_pin.is_high()
     }
 
-    /// `board.modosc_toggle_switch_state()` is the current state of the MODOSC toggle switch
+    /// `board.modosc_toggle_switch()` is the current state of the MODOSC toggle switch
     ///
     /// Clicking the physical PCB mounted switch toggles the state between true and false
-    pub fn modosc_toggle_switch_state(&mut self) -> bool {
+    pub fn modosc_toggle_switch(&mut self) -> bool {
         unsafe { core::ptr::read_volatile(&MODOSC_TOGGLE_SWITCH_STATE) }
     }
 
     /// `board.delay_ms(ms)` causes the board to busy-wait for `ms` milliseconds
     pub fn delay_ms(&mut self, ms: u32) {
         self.delay.delay_ms(ms);
+    }
+
+    /// board.tim2_timeout()` is true iff timer TIM2 has timed out, self clearing.
+    pub fn tim2_timeout(&self) -> bool {
+        unsafe {
+            if (*TIM2::ptr()).sr.read().uif().bit() {
+                (*TIM2::ptr()).sr.modify(|_, w| w.uif().clear());
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    /// board.tim6_timeout()` is true iff timer TIM6 has timed out, self clearing.
+    pub fn tim6_timeout(&self) -> bool {
+        unsafe {
+            if (*TIM6::ptr()).sr.read().uif().bit() {
+                (*TIM6::ptr()).sr.modify(|_, w| w.uif().clear());
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    /// board.tim15_timeout()` is true iff timer TIM15 has timed out, self clearing.
+    pub fn tim15_timeout(&self) -> bool {
+        unsafe {
+            if (*TIM15::ptr()).sr.read().uif().bit() {
+                (*TIM15::ptr()).sr.modify(|_, w| w.uif().clear());
+                true
+            } else {
+                false
+            }
+        }
     }
 
     /// `board.set_debug_pin(s)` writes the value `s` to the debug pin, setting it high or low
@@ -463,6 +571,15 @@ pub const DAC128S085_MAX_COUNT: u16 = (1 << 12) - 1;
 /// The maximum analog voltage that the DAC can produce after onboard amplification
 pub const DAC8162_MAX_VOUT: f32 = 10.0_f32;
 pub const DAC128S085_MAX_VOUT: f32 = 2.5_f32;
+
+/// The frequency for periodic timer TIM2
+pub const TIM2_FREQ_HZ: u32 = 1_000;
+
+/// The frequency for periodic timer TIM6
+pub const TIM6_FREQ_HZ: u32 = 1_001;
+
+/// The frequency for periodic timer TIM15
+pub const TIM15_FREQ_HZ: u32 = 33;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -496,7 +613,7 @@ pub enum AnalogMuxChannel {
     I0 = 0,
     I1 = 1,
     I2 = 2,
-    // I3..I5 are not wired
+    // I3, I4, I5 are not wired
     I6 = 6,
     I7 = 7,
     I8 = 8,
@@ -571,12 +688,19 @@ const WHITE_NOISE_PWM_MAX_COUNT: u32 = (1 << 10) - 1;
 /// the MODOSC is toggled on and off in an interrupt routine
 static mut MODOSC_TOGGLE_SWITCH_STATE: bool = false;
 
+/// ADC readings are stored in a static array via DMA
+const NUM_ADC_DMA_SIGNALS: usize = 1;
+static mut ADC_DMA_BUFF: [u16; NUM_ADC_DMA_SIGNALS] = [0; NUM_ADC_DMA_SIGNALS];
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Private Structs and enums
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/// The onboard MUX made up of two 74HC4067PW chips is represented here
+///
+/// One chip handles the analog potentiometers and one handles the switches
 #[allow(clippy::type_complexity)]
 struct Mux {
     sel_n: (
@@ -585,44 +709,44 @@ struct Mux {
         Pin<Output<PushPull>, L8, 'A', 5>,
         Pin<Output<PushPull>, L8, 'A', 6>,
     ),
-    com_analog: Pin<Analog, L8, 'A', 1>,
-    com_discrete: Pin<Input<PullUp>, L8, 'A', 2>,
+    com_discrete: Pin<Input<PullUp>, L8, 'A', 1>,
 }
 
 impl Mux {
-    fn select_channel(&mut self, channel: u8) {
+    /// `m.select_channel(c)` writes the correct states to S0..S3 to select channel `c` in `[0..15]`
+    fn select_channel(&mut self, channel: u32) {
         // write the combo of s0..s3 to select the channel
-        let channel = channel.min(15);
-        if channel & 1 == 1 {
-            self.sel_n.0.set_high();
-        } else {
-            self.sel_n.0.set_low();
-        }
-        if (channel >> 1) & 1 == 1 {
-            self.sel_n.1.set_high();
-        } else {
-            self.sel_n.1.set_low();
-        }
-        if (channel >> 2) & 1 == 1 {
-            self.sel_n.2.set_high();
-        } else {
-            self.sel_n.2.set_low();
-        }
-        if (channel >> 3) & 1 == 1 {
-            self.sel_n.3.set_high();
-        } else {
-            self.sel_n.3.set_low();
+        let channel = channel.min(0xF);
+
+        unsafe {
+            // this only works because the MUX select pins are all adjacent and in-order: pins A3, A4, A5, and A6
+
+            // reset the MUX select pins, starts at BR3
+            (*GPIOA::ptr()).bsrr.write(|w| w.bits(0xF << 19));
+            // set the MUX select pins to the channel, starts at BS3
+            (*GPIOA::ptr()).bsrr.write(|w| w.bits(channel << 3));
         }
     }
 
-    fn read_discrete(&mut self, channel: u8) -> bool {
+    /// `m.read_discrete(c)` is the state of the discrete input on channel `c` in `[0..15]`
+    fn read_discrete(&mut self, channel: u32) -> bool {
         self.select_channel(channel);
         self.com_discrete.is_high()
     }
 
-    fn read_analog(&mut self, adc: &mut ADC, channel: u8) -> f32 {
+    /// `m.read_analog(c)` is the state of the analog input on channel `c` in `[0..15]`
+    fn read_analog(&mut self, channel: u32) -> f32 {
         self.select_channel(channel);
-        adc_fs_to_normalized_fl(adc.read(&mut self.com_analog).unwrap())
+
+        unsafe {
+            // start the conversion
+            (*ADC2::ptr()).cr.modify(|_, w| w.adstart().set_bit());
+            // wait to complete
+            while (*ADC2::ptr()).cr.read().adstart().bit_is_set() {}
+            // read the data register and convert to float in [0.0, 1.0]
+            let d = (*ADC2::ptr()).dr.read().bits() as u16;
+            adc_fs_to_normalized_fl(d)
+        }
     }
 }
 
@@ -711,6 +835,7 @@ fn switch_3_way_state_from_upper_and_lower(
     match (upper_pin_state, lower_pin_state) {
         (false, true) => Switch3wayState::Up,
         (true, true) => Switch3wayState::Middle,
-        _ => Switch3wayState::Down,
+        _ => Switch3wayState::Down, // should only happen with (true, false) but catch unlikely (true, true) as well
+                                    // (true, true) means something is wrong with the switch, but the show must go on
     }
 }
