@@ -93,7 +93,7 @@ impl GateRouting {
         );
         self.vcf_env_gate =
             gate_state_from_last_and_curr(self.last_vcf_env_gate, this_vcf_env_gate);
-        self.last_s_and_h_gate = this_s_and_h_gate;
+        self.last_vcf_env_gate = this_vcf_env_gate;
 
         let this_mod_env_gate = combine_manual_and_auto_gate(
             this_manual_gate,
