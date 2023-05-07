@@ -28,9 +28,9 @@ impl SampleAndHold {
     ///
     /// * `gate` - the state of the gate which triggers the sample & hold to hold the input on rising edges
     pub fn tick(&mut self, raw_input: f32, gate: GateState) {
-        // if gate == GateState::Rising {
-        self.stepped_value = raw_input;
-        // }
+        if gate == GateState::Rising {
+            self.stepped_value = raw_input;
+        }
         self.value_with_glide = self.glide.process(self.stepped_value)
     }
 
