@@ -439,8 +439,8 @@
   )
 
   (bus_alias "SPI" (members "SCK" "SDO" "~{CS_0}" "~{CS_1}" "~{CS_2}"))
-  (bus_alias "" (members ))
   (bus_alias "MUX" (members "S0" "S1" "S2" "S3" "COM_ANALOG" "COM_DISCRETE"))
+  (bus_alias "" (members ))
   (junction (at 139.7 44.45) (diameter 0) (color 0 0 0 0)
     (uuid 22f3fd59-275a-49cf-8b63-7ec703a287a6)
   )
