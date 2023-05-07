@@ -54,6 +54,8 @@ fn main() -> ! {
         if board.tim2_timeout() {
             board.set_debug_pin(true);
 
+            ui.update(&mut board);
+
             gate_routing.update(
                 board.pwm_lfo_sqr(),
                 board.modosc_sqr(),
@@ -62,27 +64,59 @@ fn main() -> ! {
                 &mut ui,
             );
 
+            ////////////////////////////////////////////////////////////////////
+            //
+            // Envelopes
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            envelopes.update_inputs(&mut ui);
+
             envelopes.tick(&gate_routing);
-
-            sample_and_hold.tick(
-                board.sample_and_hold(),
-                gate_routing.state(gate_routing::GateSignal::SAndH),
-            );
-
-            modosc_amplitude_ctl.tick(board.modosc_toggle_switch());
 
             board.dac128S085_set_vout(
                 envelopes.vcf_env() * DAC128S085_MAX_VOUT,
-                Dac128S085Channel::A,
+                Dac128S085Channel::C,
             );
             board.dac128S085_set_vout(
                 envelopes.mod_env() * DAC128S085_MAX_VOUT,
                 Dac128S085Channel::E,
             );
-            board.dac128S085_set_vout(
-                envelopes.vca_env() * DAC128S085_MAX_VOUT,
-                Dac128S085Channel::C,
+            // the VCA can be controlled from a few different signals depending on the front panel switch
+            let vca_env = match ui.vca_ctl_mode_switch() {
+                ui::VcaCtlMode::ModEnv => envelopes.mod_env(),
+                ui::VcaCtlMode::Ar => envelopes.vca_env(),
+                ui::VcaCtlMode::Drone => 1.0_f32,
+            };
+            board.dac128S085_set_vout(vca_env * DAC128S085_MAX_VOUT, Dac128S085Channel::A);
+
+            ////////////////////////////////////////////////////////////////////
+            //
+            // Sample & Hold
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            // TODO: quantize s&h?
+            sample_and_hold.tick(
+                board.sample_and_hold(),
+                gate_routing.state(gate_routing::GateSignal::SAndH),
             );
+
+            board.dac8162_set_vout(
+                sample_and_hold.value() * DAC8162_MAX_VOUT,
+                Dac8162Channel::B,
+            );
+
+            ////////////////////////////////////////////////////////////////////
+            //
+            // ModOsc
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            // temporary to turn modosc on
+            board.dac128S085_set_vout(DAC128S085_MAX_VOUT, Dac128S085Channel::D);
+
+            modosc_amplitude_ctl.tick(board.modosc_toggle_switch());
 
             // TODO think about the MODOSC amplitude ctl, this should be combined with the MIDI mod-wheel somehow
             // also TODO think about the MODOSC LED, this needs to be scaled somewhat, the LED doesn't turn on until 1.5v or so, scale the DAC?
@@ -91,23 +125,37 @@ fn main() -> ! {
                 board::Dac128S085Channel::F,
             );
 
+            ////////////////////////////////////////////////////////////////////
+            //
+            // Pitch CV
+            //
+            ////////////////////////////////////////////////////////////////////
+
             // TODO need to scale the MIDI note/pitch-bend for 1v/oct and send it through the glide processor
 
-            board.dac8162_set_vout(
-                sample_and_hold.value() * DAC8162_MAX_VOUT,
-                Dac8162Channel::B,
+            ////////////////////////////////////////////////////////////////////
+            //
+            // Misc MIDI controls
+            //
+            ////////////////////////////////////////////////////////////////////
+
+            board.dac128S085_set_vout(
+                midi.vcf_cutoff() * DAC128S085_MAX_VOUT,
+                Dac128S085Channel::F,
             );
-
-            ui.update(&mut board);
-
-            envelopes.update_inputs(&mut ui);
 
             board.dac128S085_set_vout(
                 midi.vcf_resonance() * DAC128S085_MAX_VOUT,
                 Dac128S085Channel::B,
             );
 
-            board.dac128S085_set_vout(midi.volume() * DAC128S085_MAX_VOUT, Dac128S085Channel::F);
+            board.dac128S085_set_vout(midi.volume() * DAC128S085_MAX_VOUT, Dac128S085Channel::H);
+
+            ////////////////////////////////////////////////////////////////////
+            //
+            // LEDs
+            //
+            ////////////////////////////////////////////////////////////////////
 
             board.set_led(Led::SAndHTrig, gate_routing.state(GateSignal::SAndH).into());
             board.set_led(

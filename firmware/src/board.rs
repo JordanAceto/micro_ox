@@ -8,6 +8,7 @@ use stm32l4xx_hal::{
     hal::spi::{Mode, Phase, Polarity},
     pac::{interrupt, ADC2},
     prelude::*,
+    rcc::{ClockSecuritySystem, CrystalBypass},
     serial,
     spi::Spi,
     timer::Timer,
@@ -56,6 +57,7 @@ impl Board {
 
         let clocks = rcc
             .cfgr
+            .lse(CrystalBypass::Disable, ClockSecuritySystem::Disable) // LSE auto trims the HSI
             .hsi48(true) // needed for RNG
             .sysclk(SYST_CLK_FREQ_MHZ.MHz())
             .pclk1(SYST_CLK_FREQ_MHZ.MHz())
@@ -372,7 +374,8 @@ impl Board {
 
     /// `board.read_analog_signal(s)` is the current value of analog signal `s` in `[0.0, 1.0]`
     pub fn read_analog_signal(&mut self, signal: AnalogMuxChannel) -> f32 {
-        self.mux.read_analog(signal as u32)
+        self.mux.select_channel(signal as u32);
+        self.mux.read_com_analog()
     }
 
     /// `board.sample_and_hold()` is the current value of the onboard sample & hold, in `[0.0, 1.0]`
@@ -382,45 +385,36 @@ impl Board {
 
     /// `board.read_switch_3_way(s)` is the current state of the enumerated 3-way switch `s`
     pub fn read_switch_3_way(&mut self, switch: Switch3way) -> Switch3wayState {
-        // each 3-way switch has an upper and lower pin which are read through the discrete MUX
-        let upper_mux_ch;
-        let lower_mux_ch;
-        match switch {
-            // pins are based on the physical PCB layout
-            Switch3way::SAndHTrigSrc => {
-                upper_mux_ch = 1;
-                lower_mux_ch = 0;
-            }
-            Switch3way::VcfEnvTrigSrc => {
-                upper_mux_ch = 3;
-                lower_mux_ch = 2;
-            }
-            Switch3way::ModEnvTrigSrc => {
-                upper_mux_ch = 5;
-                lower_mux_ch = 4;
-            }
-            Switch3way::VcaEnvTrigSrc => {
-                upper_mux_ch = 8;
-                lower_mux_ch = 9;
-            }
-            Switch3way::AutoGateSrc => {
-                upper_mux_ch = 12;
-                lower_mux_ch = 13;
-            }
-            Switch3way::AutoGateLogic => {
-                upper_mux_ch = 10;
-                lower_mux_ch = 11;
-            }
-            Switch3way::VcaCtlSrc => {
-                upper_mux_ch = 7;
-                lower_mux_ch = 6;
-            }
-        }
+        // each 3-way switch has an upper and lower pin which are read through the discrete MUX with input pullup,
+        // "upper" and "lower" here mean that the upper pin is physically farther north when looking at the pcb
+        let (upper_mux_ch, lower_mux_ch) = match switch {
+            // mux channels are based on the physical PCB layout
+            Switch3way::SAndHTrigSrc => (DiscreteMuxChannel::I1, DiscreteMuxChannel::I0),
+            Switch3way::VcfEnvTrigSrc => (DiscreteMuxChannel::I3, DiscreteMuxChannel::I2),
+            Switch3way::ModEnvTrigSrc => (DiscreteMuxChannel::I5, DiscreteMuxChannel::I4),
+            Switch3way::VcaEnvTrigSrc => (DiscreteMuxChannel::I8, DiscreteMuxChannel::I9),
+            Switch3way::AutoGateSrc => (DiscreteMuxChannel::I12, DiscreteMuxChannel::I13),
+            Switch3way::AutoGateLogic => (DiscreteMuxChannel::I10, DiscreteMuxChannel::I11),
+            Switch3way::VcaCtlSrc => (DiscreteMuxChannel::I7, DiscreteMuxChannel::I6),
+        };
 
-        switch_3_way_state_from_upper_and_lower(
-            self.mux.read_discrete(upper_mux_ch),
-            self.mux.read_discrete(lower_mux_ch),
-        )
+        // if we change channels and try to read too soon we'll get bogus values
+        let mux_settle_time_usec = 1_u32;
+
+        self.mux.select_channel(upper_mux_ch as u32);
+        self.delay.delay_us(mux_settle_time_usec); // allow the value to settle
+        let upper = self.mux.read_com_discrete();
+
+        self.mux.select_channel(lower_mux_ch as u32);
+        self.delay.delay_us(mux_settle_time_usec);
+        let lower = self.mux.read_com_discrete();
+
+        match (upper, lower) {
+            (false, true) => Switch3wayState::Up,
+            (true, true) => Switch3wayState::Middle,
+            _ => Switch3wayState::Down, // should only happen with (true, false) but catch unlikely (true, true) as well
+                                        // (true, true) means something is wrong with the switch, but the show must go on
+        }
     }
 
     /// `board.dac8162_set_vout(v, c)` writes voltage `v` to channel `c` of the onboard DAC.
@@ -441,6 +435,7 @@ impl Board {
         let mid_byte = (val_u14 >> 8) as u8;
         let high_byte = channel as u8 | 0b0001_1000; // write to channel and update output
 
+        // chip select pin is based on the PCB routing
         self.spi
             .write(ChipSelect::Cs0, &[high_byte, mid_byte, low_byte]);
     }
@@ -462,6 +457,7 @@ impl Board {
         let low_byte = (val_u12 & 0xFF) as u8;
         let high_byte = (channel as u8) << 4 | (val_u12 >> 8) as u8;
 
+        // chip select pin is based on the PCB routing
         self.spi.write(ChipSelect::Cs1, &[high_byte, low_byte]);
     }
 
@@ -474,6 +470,7 @@ impl Board {
             self.led_state &= !(led as u8);
         }
         if last_led_state != self.led_state {
+            // chip select pin is based on the PCB routing
             self.spi.write(ChipSelect::Cs2, &[self.led_state])
         }
     }
@@ -626,6 +623,26 @@ pub enum AnalogMuxChannel {
     I15 = 15,
 }
 
+/// Enumerated multiplexed discrete channels are represented here. Not all channels are wired up on the physical PCB
+#[derive(Clone, Copy)]
+pub enum DiscreteMuxChannel {
+    I0 = 0,
+    I1 = 1,
+    I2 = 2,
+    I3 = 3,
+    I4 = 4,
+    I5 = 5,
+    I6 = 6,
+    I7 = 7,
+    I8 = 8,
+    I9 = 9,
+    I10 = 10,
+    I11 = 11,
+    I12 = 12,
+    I13 = 13,
+    // I14, I15 are not wired
+}
+
 /// Channels of the onboard DAC8162 are represented here
 #[derive(Clone, Copy)]
 pub enum Dac8162Channel {
@@ -700,7 +717,7 @@ static mut ADC_DMA_BUFF: [u16; NUM_ADC_DMA_SIGNALS] = [0; NUM_ADC_DMA_SIGNALS];
 
 /// The onboard MUX made up of two 74HC4067PW chips is represented here
 ///
-/// One chip handles the analog potentiometers and one handles the switches
+/// One chip handles the analog potentiometers and one handles the discrete switches
 #[allow(clippy::type_complexity)]
 struct Mux {
     sel_n: (
@@ -728,16 +745,13 @@ impl Mux {
         }
     }
 
-    /// `m.read_discrete(c)` is the state of the discrete input on channel `c` in `[0..15]`
-    fn read_discrete(&mut self, channel: u32) -> bool {
-        self.select_channel(channel);
+    /// `m.read_com_discrete()` is the state of the discrete mux common pin
+    fn read_com_discrete(&mut self) -> bool {
         self.com_discrete.is_high()
     }
 
-    /// `m.read_analog(c)` is the state of the analog input on channel `c` in `[0..15]`
-    fn read_analog(&mut self, channel: u32) -> f32 {
-        self.select_channel(channel);
-
+    /// `m.read_com_analog()` is the state of the analog mux common pin in `[0.0, 1.0]`
+    fn read_com_analog(&mut self) -> f32 {
         unsafe {
             // start the conversion
             (*ADC2::ptr()).cr.modify(|_, w| w.adstart().set_bit());
@@ -823,19 +837,4 @@ fn EXTI15_10() {
 fn adc_fs_to_normalized_fl(val: u16) -> f32 {
     let val = val.min(ADC_MAX);
     (val as f32) / (ADC_MAX as f32)
-}
-
-/// `switch_3_way_state_from_upper_and_lower(u, l)` is the 3-way switch state matching the pin states `u` and `l`
-///
-/// Each 3-way switch has an upper and lower pin, the state is governed by the combination of pin states
-fn switch_3_way_state_from_upper_and_lower(
-    upper_pin_state: bool,
-    lower_pin_state: bool,
-) -> Switch3wayState {
-    match (upper_pin_state, lower_pin_state) {
-        (false, true) => Switch3wayState::Up,
-        (true, true) => Switch3wayState::Middle,
-        _ => Switch3wayState::Down, // should only happen with (true, false) but catch unlikely (true, true) as well
-                                    // (true, true) means something is wrong with the switch, but the show must go on
-    }
 }
