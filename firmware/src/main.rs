@@ -78,10 +78,12 @@ fn main() -> ! {
                 envelopes.vcf_env() * DAC128S085_MAX_VOUT,
                 Dac128S085Channel::C,
             );
+
             board.dac128S085_set_vout(
                 envelopes.mod_env() * DAC128S085_MAX_VOUT,
                 Dac128S085Channel::E,
             );
+
             // the VCA can be controlled from a few different signals depending on the front panel switch
             let vca_env = match ui.vca_ctl_mode_switch() {
                 ui::VcaCtlMode::ModEnv => envelopes.mod_env(),
@@ -96,6 +98,8 @@ fn main() -> ! {
             //
             ////////////////////////////////////////////////////////////////////
 
+            sample_and_hold.set_glide_time(ui.scaled_pot(ui::Potentiometer::SAndHGlide));
+
             // TODO: quantize s&h?
             sample_and_hold.tick(
                 board.sample_and_hold(),
@@ -109,29 +113,36 @@ fn main() -> ! {
 
             ////////////////////////////////////////////////////////////////////
             //
-            // ModOsc
+            // ModOsc Amplitude Control
             //
             ////////////////////////////////////////////////////////////////////
 
-            // temporary to turn modosc on
-            board.dac128S085_set_vout(DAC128S085_MAX_VOUT, Dac128S085Channel::D);
+            modosc_amplitude_ctl.set_glide_time(ui.scaled_pot(ui::Potentiometer::ModOscRiseTime));
 
             modosc_amplitude_ctl.tick(board.modosc_toggle_switch());
 
-            // TODO think about the MODOSC amplitude ctl, this should be combined with the MIDI mod-wheel somehow
-            // also TODO think about the MODOSC LED, this needs to be scaled somewhat, the LED doesn't turn on until 1.5v or so, scale the DAC?
+            // the modosc amplitude is controlled by both the front panel on/off switch and MIDI mod-wheel
             board.dac128S085_set_vout(
                 modosc_amplitude_ctl.value() * midi.mod_wheel() * board::DAC128S085_MAX_VOUT,
-                board::Dac128S085Channel::F,
+                board::Dac128S085Channel::D,
             );
 
             ////////////////////////////////////////////////////////////////////
             //
-            // Pitch CV
+            // MIDI Pitch CV
             //
             ////////////////////////////////////////////////////////////////////
 
-            // TODO need to scale the MIDI note/pitch-bend for 1v/oct and send it through the glide processor
+            let midi_1v_per_oct = note_num_to_dac8164_1v_per_oct(midi.note_num());
+
+            midi_glide.set_time(ui.scaled_pot(ui::Potentiometer::Portamento));
+
+            let midi_with_glide = midi_glide.process(midi_1v_per_oct);
+
+            // scale pitch bend for +/- 2 semitones
+            let midi_pitch_bend = midi.pitch_bend() * 2.0_f32 / 12.0_f32;
+
+            board.dac8162_set_vout(midi_with_glide + midi_pitch_bend, board::Dac8162Channel::A);
 
             ////////////////////////////////////////////////////////////////////
             //
@@ -141,7 +152,7 @@ fn main() -> ! {
 
             board.dac128S085_set_vout(
                 midi.vcf_cutoff() * DAC128S085_MAX_VOUT,
-                Dac128S085Channel::F,
+                Dac128S085Channel::G,
             );
 
             board.dac128S085_set_vout(
@@ -172,7 +183,18 @@ fn main() -> ! {
                 gate_routing.state(GateSignal::AutoGate).into(),
             );
 
+            // the MODOSC LED is driven from an analog voltage to fade in and out
+            board.dac128S085_set_vout(
+                modosc_amplitude_ctl.led_driver_vout(),
+                board::Dac128S085Channel::F,
+            );
+
             board.set_debug_pin(false);
         }
     }
+}
+
+/// `note_num_to_dac8164_1v_per_oct(n)` is the note number `n` scaled to 1volt/octave
+fn note_num_to_dac8164_1v_per_oct(note_num: u8) -> f32 {
+    note_num as f32 / 12.0_f32
 }
