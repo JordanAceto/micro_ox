@@ -29,6 +29,9 @@ pub struct Ui {
 
     vca_env_attack: f32,
     vca_env_release: f32,
+
+    // counter to decide which signal to update for a given round
+    round_robbin_update_counter: u8,
 }
 
 impl Ui {
@@ -62,65 +65,110 @@ impl Ui {
 
             vca_env_attack: 0.0_f32,
             vca_env_release: 0.0_f32,
+
+            round_robbin_update_counter: 0,
         }
     }
 
     /// `ui.update()` updates the UI state by reading and storing the panel control user inputs.
     ///
-    /// It is required to periodically call this function to updat the state of the UI controls. Since these controls
-    /// are manually adjusted by the user, they don't need to be updated very fast, just fast enough that they don't
-    /// feel sluggish to the user.
+    /// It is required to periodically call this function to updat the state of the UI controls.
+    /// Reading the pots takes a significant amount of time. To avoid spending too much time in this function the
+    /// controls are updated "round-robbin" style, meaning that for a given call to this function not all of the UI
+    /// controls will be updated, but repeated calls to this function will eventually update all of the controls.
     pub fn update(&mut self, board: &mut Board) {
-        self.s_and_h_trig_src =
-            switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::SAndHTrigSrc));
+        // each call to this function updates a subset of the UI controls
+        match self.round_robbin_update_counter {
+            0 => {
+                self.s_and_h_trig_src =
+                    switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::SAndHTrigSrc))
+            }
+            1 => {
+                self.vcf_env_trig_src =
+                    switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcfEnvTrigSrc))
+            }
+            2 => {
+                self.mod_env_trig_src =
+                    switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::ModEnvTrigSrc))
+            }
+            3 => {
+                self.vca_env_trig_src =
+                    switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcaEnvTrigSrc))
+            }
+            4 => {
+                self.auto_gate_src = match board.read_switch_3_way(Switch3way::AutoGateSrc) {
+                    Switch3wayState::Up => AutoGateSource::PwmLfo,
+                    Switch3wayState::Middle => AutoGateSource::ModOsc,
+                    Switch3wayState::Down => AutoGateSource::Combo,
+                }
+            }
+            5 => {
+                self.auto_gate_logic_mode = match board.read_switch_3_way(Switch3way::AutoGateLogic)
+                {
+                    Switch3wayState::Up => AutoGateLogicMode::And,
+                    Switch3wayState::Middle => AutoGateLogicMode::Or,
+                    Switch3wayState::Down => AutoGateLogicMode::Xor,
+                }
+            }
+            6 => {
+                self.vca_ctl_mode = match board.read_switch_3_way(Switch3way::VcaCtlSrc) {
+                    Switch3wayState::Up => VcaCtlMode::ModEnv,
+                    Switch3wayState::Middle => VcaCtlMode::Drone,
+                    Switch3wayState::Down => VcaCtlMode::Ar,
+                }
+            }
+            7 => {
+                self.portamento_time =
+                    map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11))
+            }
+            8 => {
+                self.s_and_h_glide_time =
+                    map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I10))
+            }
+            9 => {
+                self.modosc_rise_time =
+                    map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I2))
+            }
+            10 => {
+                self.vcf_env_attack =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I9))
+            }
+            11 => {
+                self.vcf_env_decay =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I8))
+            }
+            12 => self.vcf_env_sustain = board.read_analog_signal(AnalogMuxChannel::I7),
+            13 => {
+                self.vcf_env_release =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I6))
+            }
+            14 => {
+                self.mod_env_attack =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I12))
+            }
+            15 => {
+                self.mod_env_decay =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I13))
+            }
+            16 => self.mod_env_sustain = board.read_analog_signal(AnalogMuxChannel::I14),
+            17 => {
+                self.mod_env_release =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I15))
+            }
+            18 => {
+                self.vca_env_attack =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I0))
+            }
+            19 => {
+                self.vca_env_release =
+                    map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I1))
+            }
+            // reset the counter when we get to the end
+            _ => self.round_robbin_update_counter = 0,
+        }
 
-        self.vcf_env_trig_src =
-            switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcfEnvTrigSrc));
-
-        self.mod_env_trig_src =
-            switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::ModEnvTrigSrc));
-
-        self.vca_env_trig_src =
-            switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcaEnvTrigSrc));
-
-        self.auto_gate_src = match board.read_switch_3_way(Switch3way::AutoGateSrc) {
-            Switch3wayState::Up => AutoGateSource::PwmLfo,
-            Switch3wayState::Middle => AutoGateSource::ModOsc,
-            Switch3wayState::Down => AutoGateSource::Combo,
-        };
-
-        self.auto_gate_logic_mode = match board.read_switch_3_way(Switch3way::AutoGateLogic) {
-            Switch3wayState::Up => AutoGateLogicMode::And,
-            Switch3wayState::Middle => AutoGateLogicMode::Or,
-            Switch3wayState::Down => AutoGateLogicMode::Xor,
-        };
-
-        self.vca_ctl_mode = match board.read_switch_3_way(Switch3way::VcaCtlSrc) {
-            Switch3wayState::Up => VcaCtlMode::ModEnv,
-            Switch3wayState::Middle => VcaCtlMode::Drone,
-            Switch3wayState::Down => VcaCtlMode::Ar,
-        };
-
-        // MUX channels are chosen based on the physical PCB routing, see schematic if curious
-        self.portamento_time =
-            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11));
-        self.s_and_h_glide_time =
-            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I10));
-        self.modosc_rise_time =
-            map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I2));
-
-        self.vcf_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I9));
-        self.vcf_env_decay = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I8));
-        self.vcf_env_sustain = board.read_analog_signal(AnalogMuxChannel::I7);
-        self.vcf_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I6));
-
-        self.mod_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I12));
-        self.mod_env_decay = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I13));
-        self.mod_env_sustain = board.read_analog_signal(AnalogMuxChannel::I14);
-        self.mod_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I15));
-
-        self.vca_env_attack = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I0));
-        self.vca_env_release = map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I1));
+        // incr the counter so next time we'll update the next control
+        self.round_robbin_update_counter += 1;
     }
 
     /// `ui.scaled_pot(p)` is the scaled value of front panel potentiometer `p`
