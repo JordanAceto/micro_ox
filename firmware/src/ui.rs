@@ -79,30 +79,30 @@ impl Ui {
     pub fn update(&mut self, board: &mut Board) {
         // each call to this function updates a subset of the UI controls
         match self.round_robbin_update_counter {
-            0 => {
+            1 => {
                 self.s_and_h_trig_src =
                     switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::SAndHTrigSrc))
             }
-            1 => {
+            2 => {
                 self.vcf_env_trig_src =
                     switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcfEnvTrigSrc))
             }
-            2 => {
+            3 => {
                 self.mod_env_trig_src =
                     switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::ModEnvTrigSrc))
             }
-            3 => {
+            4 => {
                 self.vca_env_trig_src =
                     switch_3_way_to_trig_src(board.read_switch_3_way(Switch3way::VcaEnvTrigSrc))
             }
-            4 => {
+            5 => {
                 self.auto_gate_src = match board.read_switch_3_way(Switch3way::AutoGateSrc) {
                     Switch3wayState::Up => AutoGateSource::PwmLfo,
                     Switch3wayState::Middle => AutoGateSource::ModOsc,
                     Switch3wayState::Down => AutoGateSource::Combo,
                 }
             }
-            5 => {
+            6 => {
                 self.auto_gate_logic_mode = match board.read_switch_3_way(Switch3way::AutoGateLogic)
                 {
                     Switch3wayState::Up => AutoGateLogicMode::And,
@@ -110,56 +110,56 @@ impl Ui {
                     Switch3wayState::Down => AutoGateLogicMode::Xor,
                 }
             }
-            6 => {
+            7 => {
                 self.vca_ctl_mode = match board.read_switch_3_way(Switch3way::VcaCtlSrc) {
                     Switch3wayState::Up => VcaCtlMode::ModEnv,
                     Switch3wayState::Middle => VcaCtlMode::Drone,
                     Switch3wayState::Down => VcaCtlMode::Ar,
                 }
             }
-            7 => {
+            8 => {
                 self.portamento_time =
                     map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I11))
             }
-            8 => {
+            9 => {
                 self.s_and_h_glide_time =
                     map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I10))
             }
-            9 => {
+            10 => {
                 self.modosc_rise_time =
                     map_for_glide_or_rise_time(board.read_analog_signal(AnalogMuxChannel::I2))
             }
-            10 => {
+            11 => {
                 self.vcf_env_attack =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I9))
             }
-            11 => {
+            12 => {
                 self.vcf_env_decay =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I8))
             }
-            12 => self.vcf_env_sustain = board.read_analog_signal(AnalogMuxChannel::I7),
-            13 => {
+            13 => self.vcf_env_sustain = board.read_analog_signal(AnalogMuxChannel::I7),
+            14 => {
                 self.vcf_env_release =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I6))
             }
-            14 => {
+            15 => {
                 self.mod_env_attack =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I12))
             }
-            15 => {
+            16 => {
                 self.mod_env_decay =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I13))
             }
-            16 => self.mod_env_sustain = board.read_analog_signal(AnalogMuxChannel::I14),
-            17 => {
+            17 => self.mod_env_sustain = board.read_analog_signal(AnalogMuxChannel::I14),
+            18 => {
                 self.mod_env_release =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I15))
             }
-            18 => {
+            19 => {
                 self.vca_env_attack =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I0))
             }
-            19 => {
+            20 => {
                 self.vca_env_release =
                     map_for_adsr_time(board.read_analog_signal(AnalogMuxChannel::I1))
             }
