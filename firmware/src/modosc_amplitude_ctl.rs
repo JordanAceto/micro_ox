@@ -6,7 +6,6 @@ use synth_utils::glide_processor::GlideProcessor;
 /// by the onboard DAC. A front panel switch toggles the MODOSC on and off, and the transition is smoothed out by a
 /// glide processor with adjustable time.
 pub struct ModOscAmplitudeCtl {
-    state: bool,
     value: f32,
     glide: GlideProcessor,
 }
@@ -15,7 +14,6 @@ impl ModOscAmplitudeCtl {
     /// `ModOscAmplitudeCtl::new(sr)` is a new modosc amplitude control structure with sample rate `sr`
     pub fn new(sample_rate_hz: f32) -> Self {
         Self {
-            state: false,
             value: 0.0_f32,
             glide: GlideProcessor::new(sample_rate_hz),
         }
