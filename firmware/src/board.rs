@@ -213,7 +213,7 @@ impl Board {
         ////////////////////////////////////////////////////////////////////////
 
         let mux = Mux {
-            sel_n: (
+            _sel_n: (
                 gpioa
                     .pa3
                     .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper),
@@ -499,7 +499,7 @@ impl Board {
     }
 
     /// `board.delay_ms(ms)` causes the board to busy-wait for `ms` milliseconds
-    pub fn delay_ms(&mut self, ms: u32) {
+    pub fn _delay_ms(&mut self, ms: u32) {
         self.delay.delay_ms(ms);
     }
 
@@ -516,7 +516,7 @@ impl Board {
     }
 
     /// board.tim6_timeout()` is true iff timer TIM6 has timed out, self clearing.
-    pub fn tim6_timeout(&self) -> bool {
+    pub fn _tim6_timeout(&self) -> bool {
         unsafe {
             if (*TIM6::ptr()).sr.read().uif().bit() {
                 (*TIM6::ptr()).sr.modify(|_, w| w.uif().clear());
@@ -528,7 +528,7 @@ impl Board {
     }
 
     /// board.tim15_timeout()` is true iff timer TIM15 has timed out, self clearing.
-    pub fn tim15_timeout(&self) -> bool {
+    pub fn _tim15_timeout(&self) -> bool {
         unsafe {
             if (*TIM15::ptr()).sr.read().uif().bit() {
                 (*TIM15::ptr()).sr.modify(|_, w| w.uif().clear());
@@ -720,7 +720,7 @@ static mut ADC_DMA_BUFF: [u16; NUM_ADC_DMA_SIGNALS] = [0; NUM_ADC_DMA_SIGNALS];
 /// One chip handles the analog potentiometers and one handles the discrete switches
 #[allow(clippy::type_complexity)]
 struct Mux {
-    sel_n: (
+    _sel_n: (
         Pin<Output<PushPull>, L8, 'A', 3>,
         Pin<Output<PushPull>, L8, 'A', 4>,
         Pin<Output<PushPull>, L8, 'A', 5>,
