@@ -37,8 +37,7 @@ fn main() -> ! {
     // set some MIDI controls to full-scale to start, this way if nobody plugs in a MIDI controller the volume,
     // mod-wheel ect won't be all the way down. Use running status to do all the CC messages
     for b in [
-        /* volume */ 0xB0, 0x07, 127, /* mod wheel */ 0x01, 127, /* VCF Q */ 0x4A,
-        127,
+        /* volume */ 0xB0, 0x07, 127, /* mod wheel */ 0x01, 127,
         /* velocity, no longer in CC running-status, arbitrary note-on with max velocity and then turn the note off again */
         0x90, 0, 127, 0x80, 0, 0,
     ] {
