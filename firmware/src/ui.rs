@@ -240,14 +240,14 @@ fn switch_3_way_to_trig_src(switch_state: Switch3wayState) -> TriggerSource {
 
 /// `map_for_adsr_time(v)` maps raw value `v` in `[0.0, 1.0]` to a time in seconds for controlling ADSR times
 fn map_for_adsr_time(raw_adc_val: f32) -> f32 {
-    // TODO
-    raw_adc_val
+    // bend the linear control to make it feel good to the user, add a small positive offset for min time
+    raw_adc_val * raw_adc_val * 8.0_f32 + 0.002_f32
 }
 
 /// `map_for_glide_or_rise_time(v)` maps raw value `v` in `[0.0. 1.0]` to a time in seconds for controlling glide
 fn map_for_glide_or_rise_time(raw_adc_val: f32) -> f32 {
-    // TODO
-    raw_adc_val
+    // bend the linear control to make it feel good to the user
+    raw_adc_val * raw_adc_val * 3.0_f32
 }
 
 /// Enumerated front panel potentiometers are represented here
