@@ -2094,7 +2094,7 @@
     (property "Reference" "R906" (at 152.4 128.27 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "18k" (at 152.4 130.81 90)
+    (property "Value" "10k" (at 152.4 130.81 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 152.4 136.398 90)

@@ -3921,7 +3921,7 @@
     (property "Reference" "R806" (at 60.96 148.4122 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "100k" (at 60.96 150.7236 90)
+    (property "Value" "51k" (at 60.96 150.7236 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 151.892 90)

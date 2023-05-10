@@ -2833,7 +2833,7 @@
     (property "Reference" "R214" (at 86.36 142.24 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "39k" (at 86.36 144.78 90)
+    (property "Value" "82k" (at 86.36 144.78 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 86.36 145.542 90)

@@ -808,7 +808,7 @@
     (property "Reference" "R903" (at 111.76 88.9 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "20k" (at 111.76 91.44 90)
+    (property "Value" "10k" (at 111.76 91.44 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 111.76 95.758 90)

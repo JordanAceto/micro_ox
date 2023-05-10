@@ -1670,7 +1670,7 @@
     (property "Reference" "R808" (at 215.9 69.85 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "560k" (at 215.9 72.39 90)
+    (property "Value" "1M" (at 215.9 72.39 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 215.9 76.708 90)
