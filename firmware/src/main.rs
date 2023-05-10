@@ -13,7 +13,7 @@ use crate::board::{
 };
 use crate::gate_routing::GateSignal;
 
-use synth_utils::{glide_processor, mono_midi_receiver};
+use synth_utils::{glide_processor, mono_midi_receiver, quantizer};
 
 use panic_halt as _;
 
@@ -32,6 +32,7 @@ fn main() -> ! {
 
     let mut envelopes = envelopes::Envelopes::new(DAC_UPDATE_SR);
     let mut sample_and_hold = sample_and_hold::SampleAndHold::new(DAC_UPDATE_SR);
+    let mut sample_and_hold_quantizer = quantizer::Quantizer::new();
     let mut modosc_amplitude_ctl = modosc_amplitude_ctl::ModOscAmplitudeCtl::new(DAC_UPDATE_SR);
 
     // set some MIDI controls to full-scale to start, this way if nobody plugs in a MIDI controller the volume,
@@ -99,16 +100,17 @@ fn main() -> ! {
 
             sample_and_hold.set_glide_time(ui.scaled_pot(ui::Potentiometer::SAndHGlide));
 
-            // TODO: quantize s&h?
             sample_and_hold.tick(
                 board.sample_and_hold(),
                 gate_routing.state(gate_routing::GateSignal::SAndH),
             );
 
-            board.dac8162_set_vout(
-                sample_and_hold.value() * DAC8162_MAX_VOUT,
-                Dac8162Channel::B,
-            );
+            // quantize the s&h to force it to play in-tune semitones
+            let quantized_s_and_h = sample_and_hold_quantizer
+                .convert(sample_and_hold.value() * DAC8162_MAX_VOUT)
+                .stairstep;
+
+            board.dac8162_set_vout(quantized_s_and_h, Dac8162Channel::B);
 
             ////////////////////////////////////////////////////////////////////
             //
