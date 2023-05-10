@@ -2255,7 +2255,7 @@
     (property "Reference" "R207" (at 101.6 149.86 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "51k" (at 101.6 152.4 90)
+    (property "Value" "47k" (at 101.6 152.4 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 101.6 156.718 90)
