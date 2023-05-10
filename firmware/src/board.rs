@@ -488,7 +488,8 @@ impl Board {
 
     /// `board.pwm_lfo_sqr()` is the current state of the PWM LFO Gate Input pin
     pub fn pwm_lfo_sqr(&mut self) -> bool {
-        self.pwm_lfo_sqr_pin.is_high()
+        // the signal is inverted in hardware, so flip it again to get back to right-way-round
+        self.pwm_lfo_sqr_pin.is_low()
     }
 
     /// `board.modosc_toggle_switch()` is the current state of the MODOSC toggle switch
@@ -570,7 +571,7 @@ pub const DAC8162_MAX_VOUT: f32 = 10.0_f32;
 pub const DAC128S085_MAX_VOUT: f32 = 2.5_f32;
 
 /// The frequency for periodic timer TIM2
-pub const TIM2_FREQ_HZ: u32 = 1_000;
+pub const TIM2_FREQ_HZ: u32 = 4_000;
 
 /// The frequency for periodic timer TIM6
 pub const TIM6_FREQ_HZ: u32 = 1_001;
@@ -702,8 +703,8 @@ const WHITE_NOISE_PWM_MAX_COUNT: u32 = (1 << 10) - 1;
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-/// the MODOSC is toggled on and off in an interrupt routine
-static mut MODOSC_TOGGLE_SWITCH_STATE: bool = false;
+/// the MODOSC is toggled on and off in an interrupt routine, initialize so the MODOSC is on at startup
+static mut MODOSC_TOGGLE_SWITCH_STATE: bool = true;
 
 /// ADC readings are stored in a static array via DMA
 const NUM_ADC_DMA_SIGNALS: usize = 1;
