@@ -1,6 +1,8 @@
 # VCO Board PCB Kludges
 
-The VCO board needs a kludge to scale and clamp the PWM control voltage for the SSI2130 VCOs.
+The VCO board needs a kludge to scale and clamp the PWM control voltage for the SSI2130 VCOs, and a kludge to add opamp buffers to the octave switches.
+
+## PWM Scaler Kludge
 
 The PWM circuit on the VCO board is intended to clamp the pulse width modulation so that the width of the pulse wave can get very close to 0% and 100%, but not quite reach. This is to prevent the pulse wave from disappearing when the PWM is overdriven.
 
@@ -19,3 +21,23 @@ A convenient spot to install the kludge is shown below. The input to the network
 - The 120k ohm through-hole resistor is wired to the left end of `D602`, which is connected to the +5v rail.
 
 ![PWM network image](./images/pwm_network_kludge.JPG)
+
+---
+
+## Octave Switch Buffer Kludge
+
+A single supply, rail-to-rail opamp can be installed "dead bug" style to act as a buffer between the octave switch common pins and the trimmer resistor for calibrating the octave switches. This allows the octave switches to be calibrated.
+
+The PCB traces going from the octave switch common pins must be carefully severed with an exacto knife.
+
+The MCP6002 or similar opamp is powered by the +5v rail. This can be accessed on the left side of R329. The minus supply pin for the opamp may be soldered to the ground plane after scraping away some solder mask.
+
+The buffer may then be constructed according to the images and schematic snippet below.
+
+![](./images/oct_switch_buffer_schem.png)
+
+![](./images/oct_switch_buffer_angle.JPG)
+
+![](./images/oct_switch_buffer_straight.JPG)
+
+![](./images/oct_switch_buffer_rear.JPG)
