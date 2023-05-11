@@ -929,8 +929,8 @@
     )
   )
 
-  (bus_alias "MOD_BUS" (members "1V_PER_OCT" "LIN_FM" "TIME_REV" "PWM" "AUX_CV_1" "AUX_CV_2" "AUX_CV_3" "AUX_CV_4" "FINE_TUNE_1" "FINE_TUNE_2"))
   (bus_alias "AUDIO_BUS" (members "VCO_A" "VCO_B" "SUBOCT_SAW" "RING_MOD" "WHITE_NOISE" "EXT_AUDIO" "SUBOCT_PULSE" "PINK_NOISE" ""))
+  (bus_alias "MOD_BUS" (members "1V_PER_OCT" "LIN_FM" "TIME_REV" "PWM" "AUX_CV_1" "AUX_CV_2" "AUX_CV_3" "AUX_CV_4" "FINE_TUNE_1" "FINE_TUNE_2"))
   (junction (at 262.89 55.88) (diameter 0) (color 0 0 0 0)
     (uuid 00529d81-7e26-4c75-aaca-c2753d303066)
   )

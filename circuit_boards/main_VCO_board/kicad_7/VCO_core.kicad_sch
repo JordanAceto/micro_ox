@@ -3842,7 +3842,7 @@
     (property "Reference" "R217" (at 86.36 180.34 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "2M2" (at 86.36 182.88 90)
+    (property "Value" "1M" (at 86.36 182.88 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 86.36 183.642 90)
