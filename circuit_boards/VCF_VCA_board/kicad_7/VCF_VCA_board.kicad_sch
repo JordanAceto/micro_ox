@@ -1435,7 +1435,7 @@
     (uuid ffbb267d-b7a3-4fb6-b75b-11e7f24fcce8)
   )
 
-  (text "Optional diode clipper\nnetwork to limit amplitude\nand generate distortion.\n\nExperimentation is suggested.\nVarious LEDs and diodes may\nbe used.\n\nThe distorion will be more\npronounced on the Bandpass\nand Highpass modes."
+  (text "Optional diode clipper\nnetwork to limit amplitude\nand generate distortion.\n\nExperimentation is suggested.\nVarious LEDs and diodes may\nbe used.\n\nThe distortion will be more\npronounced on the Bandpass\nand Highpass modes."
     (at 194.31 128.27 0)
     (effects (font (size 1.75 1.75) bold) (justify left bottom))
     (uuid 57ee118d-f9de-4e6a-b201-83865063a8d8)
