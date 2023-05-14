@@ -12,4 +12,5 @@
 - All major features work
 - There are a few PCB kludges required for the first board revisions
 - Expect minor componenent and code changes as evalutation continues
-- The jack panel, power supply, and body are not started yet
+- The jack panel and body are not started yet
+- Documentation is incomplete while the design is in flux, expect some dead links to schematics/etc for now
