@@ -413,7 +413,7 @@ impl Board {
             (false, true) => Switch3wayState::Up,
             (true, true) => Switch3wayState::Middle,
             _ => Switch3wayState::Down, // should only happen with (true, false) but catch unlikely (true, true) as well
-                                        // (true, true) means something is wrong with the switch, but the show must go on
+                                        // (false, false) means something is wrong with the switch, but the show must go on
         }
     }
 
