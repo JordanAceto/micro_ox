@@ -27,3 +27,10 @@
 | mod board | 50mA  | 20mA  |
 |           |       |       |
 | **TOTAL** | 160mA | 120mA |
+
+---
+
+## Some boards may need kludges (small trace cuts/fixes)
+- look for a `pcb_kludges` subdirectory in a given circuitboard directory
+- if this subdirectory exists, it will include instructions for the kludge in the form of a README file
+- if you don't find this directory, assume that the PCB does not require any kludges
