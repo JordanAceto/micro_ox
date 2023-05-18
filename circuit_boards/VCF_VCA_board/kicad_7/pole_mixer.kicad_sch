@@ -667,7 +667,7 @@
     (property "Reference" "R509" (at 146.05 123.19 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "56k" (at 146.05 125.73 90)
+    (property "Value" "30k" (at 146.05 125.73 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 146.05 130.048 90)

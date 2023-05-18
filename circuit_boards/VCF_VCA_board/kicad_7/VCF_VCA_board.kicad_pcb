@@ -4497,7 +4497,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 6855564a-2356-4eda-b600-1dd39d620fa5)
     )
-    (fp_text value "56k" (at 0 -1.43) (layer "B.Fab")
+    (fp_text value "30k" (at 0 -1.43) (layer "B.Fab")
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 131579f2-bd2a-4bed-8140-94ee03d1bb63)
     )
