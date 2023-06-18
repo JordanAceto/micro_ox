@@ -1,5 +1,7 @@
 # Analog monosynth with digital control path
 
+![](./images/front_angle.JPG)
+
 ![](./images/micro_ox_front_panel_front.svg)
 
 ## The idea:
