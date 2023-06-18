@@ -2125,7 +2125,7 @@
     (property "Reference" "R217" (at 250.19 123.19 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "18k" (at 250.19 125.73 90)
+    (property "Value" "30k" (at 250.19 125.73 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 250.19 130.048 90)
